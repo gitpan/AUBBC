@@ -455,8 +455,7 @@ sub do_smileys {
        # Make the smilies.
        foreach my $smly (keys %SMILEYS) {
                DOS_prevent();
-               $message =~ s~\[$smly\]~<img src="$AUBBC{images_url}/smilies/$SMILEYS{$smly}" alt="$smly" align="left" vspace="1" hspace="1" border="$AUBBC{image_border}"$AUBBC{html_type}>$AUBBC{image_wrap}~isg if $smly && exists $SMILEYS{$smly};
-               #$message =~ s~\[$smly\]~<img src="$AUBBC{images_url}/smilies/$SMILEYS{$smly}" alt="$smly" border="$AUBBC{image_border}"$AUBBC{html_type}>$AUBBC{image_wrap}~isg if $smly && exists $SMILEYS{$smly};
+               $message =~ s~\[$smly\]~<img src="$AUBBC{images_url}/smilies/$SMILEYS{$smly}" alt="$smly" border="$AUBBC{image_border}"$AUBBC{html_type}>$AUBBC{image_wrap}~isg if $smly && exists $SMILEYS{$smly};
        }
     warn "END do_smileys $self" if $DEBUG_AUBBC;
     return $message;
@@ -737,9 +736,9 @@ Enable or Disable Image Border Default 0 is Disable, 1 is Enabled.
 
  example:
 
- smileis must be in /smileis folder
+ smilies must be in /smilies folder
 
- the images_url link must have the /smileis folder in it and not point directly to /smileis.
+ the images_url link must have the /smilies folder in it and not point directly to /smilies.
 
 =head2 html_type
 
@@ -802,7 +801,7 @@ example:
 
 =head2 other_sites_pattern
 
-Default is 'a-zA-Z\d\:\-\s\_\/\.' and this resticts the use of characters used in tags to other sites, not used in [url] tags.
+Default is 'a-zA-Z\d\:\-\s\_\/\.' and this restricts the use of characters used in tags to other sites, not used in [url] tags.
 
 other site tags:
 
@@ -819,7 +818,7 @@ other site tags:
 
 =head2 bad_pattern
 
-Default is 'view\-source:|script:|mocha:|mailto:|about:|shell:|\.js' and this resticts the use of characters used in [email] and all [img] tags.
+Default is 'view\-source:|script:|mocha:|mailto:|about:|shell:|\.js' and this restricts the use of characters used in [email] and all [img] tags.
 
 =head2 script_escape
 
@@ -840,7 +839,7 @@ can result is a security compromise of the AUBBC tags.
 
   Default is 1 and other possible values are (0, 2, 3, 4).
 
-  Can add a protection to hide emails in the [email] tag from email harvisters.
+  Can add a protection to hide emails in the [email] tag from email harvesters.
 
 
   Not 100% fool proof.
@@ -861,17 +860,17 @@ can result is a security compromise of the AUBBC tags.
 
 
 
-=head1 Smileis Settings
+=head1 Smilies Settings
 
-These are the settings for using custom smileis.
+These are the settings for using custom smilies.
 
-Note: There are no Built-in smileis.
+Note: There are no Built-in smilies.
 
 =head2 $aubbc->smiley_hash();
 
-This is one of the two ways to import your custom smileis hash.
+This is one of the two ways to import your custom smilies hash.
 
-exampl:
+example:
 
   use AUBBC;
   my $aubbc = new AUBBC;
@@ -882,13 +881,13 @@ The way you use this smiley is [lol]
 
 Must have the images_url set to the proper location.
 
-images_url/smileis/lol.gif
+images_url/smilies/lol.gif
 
 =head2 %AUBBC::SMILEYS
 
 This is one of the two ways to import your custom smiley hash.
 
-exampl:
+example:
 
   my %smiley = (lol => 'lol.gif');
   use AUBBC;
@@ -899,7 +898,7 @@ The way you use this smiley is [lol]
 
 Must have the images_url set to the proper location.
 
-images_url/smileis/lol.gif
+images_url/smilies/lol.gif
 
 =head1 Build your own tags
 
@@ -921,7 +920,7 @@ pattern - limited to 'all' or 'l,n,-,:,_,s'
 
 type - 1 is style [name://pattern], 2 is style [name]pattern[/name] and 3 is style [name]
 
-function - a pre-defined subroutine that recives the matched pattern and returns what you want,
+function - a pre-defined subroutine that receives the matched pattern and returns what you want,
 
    Note: if the function returns undefined, '' or 0 the tag will not be changed.
 
@@ -971,6 +970,36 @@ There are two ways to use this.
 
 2) Remove all built tags: $aubbc->remove_build_tag('', 1);
 
+=head1 AUBBC Methods
+
+List of other Methods
+
+=head2 $aubbc->do_all_ubbc($message);
+
+This is the method to convert the tags.
+
+        $message = $aubbc->do_all_ubbc($message);
+
+=head2 $aubbc->get_setting($setting_name);
+
+A method for getting a setting from the module.
+
+Usage:
+
+        my $utf_active = $aubbc->get_setting('utf'); # if $utf_active = '' or 0 its not active
+
+=head2 $aubbc->script_escape($message);
+
+Escapes characters.
+
+        $message = $aubbc->script_escape($message);
+
+=head2 $aubbc->html_to_text($message);
+
+A reverse for script_escape()
+
+        $message = $aubbc->html_to_text($message);
+
 =head1 Error Message
 
 =head2 $AUBBC::BAD_MESSAGE
@@ -980,12 +1009,12 @@ Default message is 'Error', this message is used when the code finds bad charact
  Usage of this setting:
 
   use AUBBC;
-  $AUBBC::BAD_MESSAGE = 'Unathorized use of characters or pattern in this tag.';
+  $AUBBC::BAD_MESSAGE = 'Unauthorized use of characters or pattern in this tag.';
   # est...
 
 =head1 Debug
 
-The Debug setting will send a lot of messages to warn and is not recommened to leave on all the time.
+The Debug setting will send a lot of messages to warn and is not recommended to leave on all the time.
 
 =head2 $AUBBC::DEBUG_AUBBC
 
