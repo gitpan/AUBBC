@@ -11,15 +11,6 @@ $aubbc->settings( protect_email => 4 );
 
 # The list
 my $message = <<HTML;
-[b]Linking to other sites[/b] - like [google://Google] Search, [wp://Wikipedia:About] Wikipedia, [wb://Wikibooks:About] Wikibooks, [wq://Wikiquote:About] Wikiquote, [ws://Wikisource:About_Wikisource] Wikisource and [cpan://Cpan] Perl Modules
-[code=Linking to other sites]
-[google://Google] Google Search
-[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia
-[wb://Wikibooks:About] or [wikibooks://Wikibooks:About] Wikibooks
-[wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote
-[ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource
-[cpan://Cpan] Cpan Module Search
-[/code]
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
 [[i]Italic[[/i] = [i]Italic[/i][br]
@@ -32,8 +23,8 @@ my $message = <<HTML;
 [sub]]Sub[[/sub] = [sub]Sub[/sub][br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
 [img]]Image[[/img] = [img]home1.png[/img][br]
-[aright_img]]Image[[/img] = [aright_img]home1.png[/img][br]
-[aleft_img]]Image[[/img] = [aleft_img]home1.png[/img][br][br][br]
+[right_img]]Image[[/img] = [right_img]home1.png[/img][br]
+[left_img]]Image[[/img] = [left_img]home1.png[/img][br][br][br]
 [url]]URL[[/url] = [url]http://google.com[/url][br]
 [url=URL]]Name[[/url] = [url=http://google.com]Google[/url][br]
 http&#58;//google.com = http://google.com[br]
@@ -48,16 +39,12 @@ www&#46;cpan.org = www.cpan.org[br]
 [ul]]My List[li]].....[/li]][li]].....[/li]][li]].....[/li]][/ul]] = [ul]My List[li].....[/li][li].....[/li][li].....[/li][/ul][br]
 [ol]]My Numbered List[li=1]].....[/li]][li]].....[/li]][li]].....[/li]][/ol]] = [ol]My Numbered List[li=1].....[/li][li].....[/li][li].....[/li][/ol][br]
 [color=Red]]Color[/color]] = [color=Red]Color[/color][br][br]
-[b]Unicode Support[/b][br][u://0931]] = [u://0931][br]
-[u://x3A3]] = [u://x3A3][br]
+[b]Unicode Support[/b][br]
 [utf://x3A3]] = [utf://x3A3][br]
 [utf://0931]] = [utf://0931][br]
-[u0931]] = [u0931][br]
-[ux3A3]] = [ux3A3][br]
 &#0931&#59; =  &#0931;[br][br]
-[b]Entity names[/b]
+[b]Entity names[/b][br]
 &iquest&#59; = &iquest;[br]
-[[time] = [time]
 HTML
 
 $message = $aubbc->do_all_ubbc($message);
