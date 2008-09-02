@@ -13,7 +13,9 @@ AUBBC
  to make formating of posts easy to people that have no HTML/XHTML skill. Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
 
  This module addresses many security issues the UBBC tags may have mainly cross site script also known as XSS.
- Each message is sanitized/escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
+ Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
+ The script_escape setting and method also converts the ' sign so the text can be stored in a SQL back-end.
+ Most of the free web portals use the | sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
 
  Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
 

@@ -181,7 +181,7 @@ sub do_ubbc {
         }
          else {
          # Standard
-                $message =~ s~\[email\]([a-z\d\.\-\_]+\@[a-zA-Z\d\.\-\_]+)\[/email\]~<A href="mailto:$1"$AUBBC{href_class}>$1</a>~isgo;
+                $message =~ s~\[email\]([a-z\d\.\-\_\&]+\@[a-zA-Z\d\.\-\_]+)\[/email\]~<A href="mailto:$1"$AUBBC{href_class}>$1</a>~isgo;
               }
 
         $message =~ s~\[color=([\w#]+)\](.*?)\[/color\]~<font color='$1'>$2</font>~isgo;
@@ -398,10 +398,8 @@ sub do_unicode {
     my ($self,$message) = @_;
     warn "ENTER do_unicode $self" if $DEBUG_AUBBC;
     # Unicode Support
-    # [u://0931] or [utf://x23]
-    $message =~ s{\[(?:u|utf)://(x?[0-9a-f]+)\]}{&#$1\;}igso;
-    # [ux23] - Commented to reserve more tag names
-    #$message =~ s{\[u(x?[0-9a-f]+)\]}{&#$1\;}igso;
+    # [utf://x23]
+    $message =~ s{\[utf://(x?[0-9a-f]+)\]}{&#$1\;}igso;
     # &#x23; or &#0931;
     $message =~ s{&amp\;#(x?[0-9a-f]+)\;}{&#$1\;}igso;
     # code names
