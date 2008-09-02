@@ -521,6 +521,7 @@ Added missing $AUBBC{image_border}, $AUBBC{html_type} and $AUBBC{image_wrap} to 
 
 Changed names of left and right align images to [left_img]..[/img] and [right_img]..[/img], also updated examples to show tags.
 
+Added missing $AUBBC{html_type} to quote, code tags and code_highlight function.
 
 v1.0 01/20/2008 08:46:08
 

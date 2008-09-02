@@ -102,7 +102,7 @@ my ($self,$name) = @_;
 sub code_highlight {
     my $text_code = shift;
     warn "START code_highlight" if $DEBUG_AUBBC;
-    $text_code =~ s~<br>~=br=~gso;
+    $text_code =~ s~<br$AUBBC{html_type}>~=br$AUBBC{html_type}=~gso;
     $text_code =~ s!:!&#58;!go;
     $text_code =~ s!\[!&#91;!go;
     $text_code =~ s!\]!&#93;!go;
@@ -115,16 +115,16 @@ sub code_highlight {
     $text_code =~ s{&quot;}{&#34;}go;
 if ($AUBBC{highlight}) {
     warn "START block highlight" if $DEBUG_AUBBC;
-    $text_code =~ s{\z}{=br=}go if $text_code !~ m/=br=\z/io; # fix
+    $text_code =~ s{\z}{=br$AUBBC{html_type}=}go if $text_code !~ m/=br$AUBBC{html_type}=\z/io; # fix
     $text_code =~ s!(&#60;&#60;(\w+);.*?\b\2\b)!<font color=DarkRed>$1</font>!go;
-    $text_code =~ s{(?<![\&\$])(\#.*?(?:=br=))}{<font color='#0000FF'><i>$1</i></font>}igo;
-    $text_code =~ s{(&#39;.*?(?:&#39;|=br=))}{<font color='#8B0000'>$1</font>}go;
-    $text_code =~ s{(&#34;.*?(?:&#34;|=br=))}{<font color='#8B0000'>$1</font>}go;
+    $text_code =~ s{(?<![\&\$])(\#.*?(?:=br$AUBBC{html_type}=))}{<font color='#0000FF'><i>$1</i></font>}igo;
+    $text_code =~ s{(&#39;.*?(?:&#39;|=br$AUBBC{html_type}=))}{<font color='#8B0000'>$1</font>}go;
+    $text_code =~ s{(&#34;.*?(?:&#34;|=br$AUBBC{html_type}=))}{<font color='#8B0000'>$1</font>}go;
     $text_code =~ s{(?<![\#|\w|\d])(\d+)(?!\w)}{<font color='#008000'>$1</font>}go;
     $text_code =~ s!\b(strict|package|return|require|for|my|sub|if|eq|ne|lt|ge|le|gt|or|use|while|foreach|next|last|unless|elsif|else|not|and|until|continue|do|goto)\b!<b>$1</b>!go;
     warn "END block highlight" if $DEBUG_AUBBC;
     }
-    $text_code =~ s~=br=~<br>~gso;
+    $text_code =~ s~=br$AUBBC{html_type}=~<br$AUBBC{html_type}>~gso;
     warn "END code_highlight" if $DEBUG_AUBBC;
     return $text_code;
 }
@@ -142,7 +142,7 @@ sub do_ubbc {
           }isg;
         # [code=...]...[/code] or [c=...]...[/c]
         $message =~ s{\[(?:c|code)=(.+?)\](?s)(.+?)\[/(?:c|code)\]} {
-         $1:<br>
+         $1:<br$AUBBC{html_type}>
           <div$AUBBC{code_class}><code>
           ${\code_highlight($2)}
           </code></div>$AUBBC{code_extra}
@@ -185,7 +185,7 @@ sub do_ubbc {
               }
 
         $message =~ s~\[color=([\w#]+)\](.*?)\[/color\]~<font color='$1'>$2</font>~isgo;
-        $message =~ s~\[quote=([\w\s]+)\]~<span$AUBBC{quote_class}><small><b><u>$1:</u></b></small><br>~isgo;
+        $message =~ s~\[quote=([\w\s]+)\]~<span$AUBBC{quote_class}><small><b><u>$1:</u></b></small><br$AUBBC{html_type}>~isgo;
         $message =~ s~\[/quote\]~</span>$AUBBC{quote_extra}~isgo;
         $message =~ s~\[quote\]~<span$AUBBC{quote_class}>~isgo;
         $message =~ s~\[right\]~<div align=\"right\">~isgo;

@@ -16,7 +16,7 @@ Improvement history for AUBBC
  - Commented bad_pattern check for [email] tags, this security check is not needed because the next line will take care of all email tag security.
  - Added missing $AUBBC{image_border}, $AUBBC{html_type} and $AUBBC{image_wrap} to the none icon image.
  - Changed names of left and right align images to [left_img]..[/img] and [right_img]..[/img], also updated examples to show tags.
-
+ - Added missing $AUBBC{html_type} to quote, code tags and code_highlight function.
 
  - v1.0 01/20/2008 08:46:08 By: N.K.A
  - Released.
