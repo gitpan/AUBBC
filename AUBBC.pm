@@ -1,7 +1,7 @@
 package AUBBC;
 =head1 COPYLEFT
 
- AUBBC.pm, v1.10 09/02/2008 09:49:46 By: N.K.A
+ AUBBC.pm, v1.20 09/07/2008 09:23:09 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 
@@ -14,7 +14,7 @@ use warnings;
 
 our ( $DEBUG_AUBBC, $BAD_MESSAGE, %SMILEYS ) = ( '', 'Error', () );
 
-my ( $AUBBC_VERSION, %Build_AUBBC ) = ( '1.10', () );
+my ( $AUBBC_VERSION, %Build_AUBBC ) = ( '1.20', () );
 
 my %AUBBC = (
 aubbc => 1,
@@ -109,7 +109,7 @@ sub code_highlight {
     $text_code =~ s!\{!&#123;!go;
     $text_code =~ s!\}!&#125;!go;
     $text_code =~ s!%!&#37;!go;
-    $text_code =~ s!\s{1};!&#59;!go; # ;
+    $text_code =~ s!\s{1};! &#59;!go; # ;
     $text_code =~ s{&lt;}{&#60;}go;
     $text_code =~ s{&gt;}{&#62;}go;
     $text_code =~ s{&quot;}{&#34;}go;
@@ -399,11 +399,11 @@ sub do_unicode {
     warn "ENTER do_unicode $self" if $DEBUG_AUBBC;
     # Unicode Support
     # [utf://x23]
-    $message =~ s{\[utf://(x?[0-9a-f]+)\]}{&#$1\;}igso;
+    $message =~ s{\[utf://(x?[0-9a-f]+)\]}{&#$1;}igso;
     # &#x23; or &#0931;
-    $message =~ s{&amp\;#(x?[0-9a-f]+)\;}{&#$1\;}igso;
+    $message =~ s{&amp;#(x?[0-9a-f]+);}{&#$1;}igso;
     # code names
-    $message =~ s{&amp\;([a-fA-Z]+)\;}{&$1\;}igso;
+    $message =~ s{&amp;([a-fA-Z]+);}{&$1;}igso;
     warn "END do_unicode $self" if $DEBUG_AUBBC;
     return $message;
 }
@@ -432,12 +432,11 @@ sub do_all_ubbc {
     warn "ENTER do_all_ubbc $self" if $DEBUG_AUBBC;
     if (!$AUBBC{no_bypass} && $message =~ s/\A\#none//go) {
         warn "START&END no_bypass $self" if $DEBUG_AUBBC;
-        $message = $self->script_escape($message) if $AUBBC{script_escape}; # Added
+        $message = $self->script_escape($message) if $AUBBC{script_escape};
          return $message;
     }
      else {
-    $message = $self->script_escape($message) if $AUBBC{script_escape}; # Moved up here
-    return $message unless $message =~ m{[\[\]\(\:]};
+    $message = $self->script_escape($message) if $AUBBC{script_escape};
     $message = $self->escape_aubbc($message, 1) if $AUBBC{aubbc_escape};
     $message = (!$AUBBC{no_bypass} && $message =~ s/\A\#noubbc//go)
         ? $message
@@ -497,7 +496,7 @@ warn "ENTER html_escape $self" if $DEBUG_AUBBC;
         $text =~ s{\\}{&#92;}gso;
         $text =~ s{\|}{&#124;}gso;
         }
-        $text =~ s{\n}{<br>}gso if (!$option);
+        $text =~ s{\n}{<br$AUBBC{html_type}>}gso if (!$option);
         $text =~ s{\cM}{}gso if ($option || !$option);
 warn "END html_escape $self" if $DEBUG_AUBBC;
         return $text;
@@ -521,7 +520,7 @@ warn "ENTER html_to_text $self" if $DEBUG_AUBBC;
         $html =~ s{&#92;}{\\}gso;
         $html =~ s{&#124;}{\|}gso;
         }
-        $html =~ s{<br>}{\n}gso if (!$option);
+        $html =~ s{<br$AUBBC{html_type}>}{\n}gso if (!$option);
 warn "END html_to_text $self" if $DEBUG_AUBBC;
         return $html;
 }

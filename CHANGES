@@ -1,22 +1,44 @@
 Improvement history for AUBBC
 
- - v1.10 - 09/02/2008 09:49:46
- - Added two more tags [big]..[/big] and [small]..[/small].
- - Removed utf tag style [ux23] and [u://0931] to make more tag names available.
- - Changed add_build_tag() to use hash variable, see "Build your own tags" for the new style.
- - Changed the way functions should work for built tags, the custom function for built tags will receive the tag name and data of the tag. This is so one function can handle many tags.
- - Removed other site tags and setting other_sites_pattern, an example of them are in "Build your own tags"
- - Removed [time] tag, example in "Build your own tags".
- - Email now allows names with & sign
- - Now every message that is passed to do_all_ubbc() gets escaped before being returned if script_escape is Enabled.
- - All tags in %AUBBC_TAGS will only convert if lowercase.
- - "new" now uses the most standard referenced object method.
- - Removed DOS_prevent() method, since the script has been tested more and was causing a timing problem.
- - Removed [cd]#code[/cd] code tag, which had no code_class or code_extra.
- - Commented bad_pattern check for [email] tags, this security check is not needed because the next line will take care of all email tag security.
- - Added missing $AUBBC{image_border}, $AUBBC{html_type} and $AUBBC{image_wrap} to the none icon image.
- - Changed names of left and right align images to [left_img]..[/img] and [right_img]..[/img], also updated examples to show tags.
- - Added missing $AUBBC{html_type} to quote, code tags and code_highlight function.
+v1.20 09/07/2008 09:23:09
 
- - v1.0 01/20/2008 08:46:08 By: N.K.A
- - Released.
+Fixed bug that bypassed utf tag converter if square bracket wasn't detected
+
+Fixed Makefile.PL
+
+v1.10 - 09/02/2008 09:49:46
+
+Added two more tags [big]..[/big] and [small]..[/small].
+
+Removed utf tag style [ux23] and [u://0931] to make more tag names available.
+
+Changed add_build_tag() to use hash variable, see "Build your own tags" for the new style.
+
+Changed the way functions should work for built tags, the custom function for built tags will receive the tag name and data of the tag. This is so one function can handle many tags.
+
+Removed other site tags and setting other_sites_pattern, an example of them are in "Build your own tags"
+
+Removed [time] tag, example in "Build your own tags".
+
+Email now allows names with & sign
+
+Now every message that is passed to do_all_ubbc() gets escaped before being returned if script_escape is Enabled.
+
+All tags in %AUBBC_TAGS will only convert if lowercase.
+
+"new" now uses the most standard referenced object method.
+
+Removed DOS_prevent() method, since the script has been tested more and was causing a timing problem.
+
+Removed [cd]#code[/cd] code tag, which had no code_class or code_extra.
+
+Commented bad_pattern check for [email] tags, this security check is not needed because the next line will take care of all email tag security.
+
+Added missing $AUBBC{image_border}, $AUBBC{html_type} and $AUBBC{image_wrap} to the none icon image.
+
+Changed names of left and right align images to [left_img]..[/img] and [right_img]..[/img], also updated examples to show tags.
+Added missing $AUBBC{html_type} to quote, code tags and code_highlight function.
+
+v1.0 01/20/2008 08:46:08
+
+Released.

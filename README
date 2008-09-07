@@ -14,22 +14,22 @@ AUBBC
 
 =head1 Description
 
- AUBBC - (Advanced Universal Bulletin Board Code)
+AUBBC - (Advanced Universal Bulletin Board Code)
  Tags used to create formatting effects in HTML & XHTML.
 
 =head1 Abstract
 
- The advantage of using this Bulletin Board Code tags is to restrict the usage of HTML/XHTML elements and
- to make formating of posts easy to people that have no HTML/XHTML skill. Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
+The advantage of using this Bulletin Board Code tags is to restrict the usage of HTML/XHTML elements and
+to make formating of posts easy to people that have no HTML/XHTML skill. Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
 
- This module addresses many security issues the UBBC tags may have mainly cross site script also known as XSS.
- Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
- The script_escape setting and method also converts the ' sign so the text can be stored in a SQL back-end.
- Most of the free web portals use the | sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
+This module addresses many security issues the UBBC tags may have mainly cross site script also known as XSS.
+Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
+The script_escape setting and method also converts the ' sign so the text can be stored in a SQL back-end.
+Most of the free web portals use the | sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
 
- Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
+Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
 
- If there isn't a popular tag available this module provides a method to "Build your own tags" custom tags can help link to parts of the current web page, other web pages and add other HTML elements.
+If there isn't a popular tag available this module provides a method to "Build your own tags" custom tags can help link to parts of the current web page, other web pages and add other HTML elements.
 
 =head1 Settings
 
@@ -359,34 +359,7 @@ Usage:
         function => 'My_Message::get_some_tag',
         );
 
-  my @other_sites =
-        ('cpan','google','wikisource','ws','wikiquote','wq','wikibooks','wb','wikipedia','wp');
-  foreach my $tag (@other_sites) {
-  $aubbc->add_build_tag(
-        name     => $tag,
-        pattern  => 'all',
-        type     => 1,
-        function => 'My_Message::other_sites',
-        );
-  }
-
-  $aubbc->add_build_tag(
-        name     => 'time',
-        pattern  => '',
-        type     => 3,
-        function => 'My_Message::other_sites',
-        );
-
-  my $message = <<TEXT;
-  [ok://test me] [ok://test other] [ok://n0 w00rk] [ip] [agent]
-  [google://Google] Google Search
-  [wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia
-  [wb://Wikibooks:About] or [wikibooks://Wikibooks:About] Wikibooks
-  [wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote
-  [ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource
-  [cpan://Cpan] Cpan Module Search
-  [time] Time
-  TEXT
+  my $message = '[ok://test me] [ok://test other] [ok://n0 w00rk] [ip] [agent]';
 
   $message = $aubbc->do_all_ubbc($message);
 
@@ -405,46 +378,12 @@ Usage:
 
   sub get_some_tag {
   my ($tag_name, $text_from_AUBBC) = @_;
-  lc($tag_name);
+  $tag_name = lc($tag_name);
   $text_from_AUBBC = $ENV{'REMOTE_ADDR'} if ($tag_name eq 'ip');
   $text_from_AUBBC = $ENV{'HTTP_USER_AGENT'} if ($tag_name eq 'agent');
   return $text_from_AUBBC;
   }
 
-  sub other_sites {
-  my ($tag_name, $text_from_AUBBC) = @_;
-
-  # cpan modules
-  # http://search.cpan.org/search?mode=module&query=Net%3A%3ASyslog
-  $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
-
-  # wikipedia Wiki
-  # http://wikipedia.org/wiki/Special:Search?search=search%20terms
-  $text_from_AUBBC = "<a href=\"http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');
-
-  # wikibooks Wiki Books
-  # http://wikibooks.org/wiki/Special:Search?search=search%20terms
-  $text_from_AUBBC = "<a href=\"http://wikibooks.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikibooks' || $tag_name eq 'wb');
-
-  # wikiquote Wiki Quote
-  # http://wikiquote.org/wiki/Special:Search?search=here&go=Go
-  $text_from_AUBBC = "<a href=\"http://wikiquote.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikiquote' || $tag_name eq 'wq');
-
-  # wikisource Wiki Source
-  # http://wikisource.org/wiki/Special:Search?search=
-  $text_from_AUBBC = "<a href=\"http://wikisource.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikisource' || $tag_name eq 'ws');
-
-  # google search
-  # http://www.google.com/search?q=search%20terms
-  $text_from_AUBBC = "<a href=\"http://www.google.com/search?q=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'google';
-
-  # localtime()
-  if ($tag_name eq 'time') {
-        my $time = scalar(localtime);
-        $text_from_AUBBC = "<b>[$time]</b>";
-        }
-        return $text_from_AUBBC;
-  }
   1;
 
 =head2 $aubbc->remove_build_tag($name, $option);
@@ -499,6 +438,12 @@ Returns the current version of the module.
 
 =head1 History
 
+v1.20 - 09/07/2008 09:23:09
+
+Fixed bug that bypassed utf tag converter if square bracket wasn't detected
+
+Fixed Makefile.PL
+
 v1.10 - 09/02/2008 09:49:46
 
 Added two more tags [big]..[/big] and [small]..[/small].
@@ -539,7 +484,7 @@ Released.
 
 =head1 COPYLEFT
 
- AUBBC.pm, v1.10 09/02/2008 09:49:46 By: N.K.A
+ AUBBC.pm, v1.20 09/07/2008 09:23:09 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 
