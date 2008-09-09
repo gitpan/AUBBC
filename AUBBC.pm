@@ -1,7 +1,7 @@
 package AUBBC;
 =head1 COPYLEFT
 
- AUBBC.pm, v1.20 09/07/2008 09:23:09 By: N.K.A
+ AUBBC.pm, v1.30 09/07/2008 14:12:10 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 
@@ -14,7 +14,7 @@ use warnings;
 
 our ( $DEBUG_AUBBC, $BAD_MESSAGE, %SMILEYS ) = ( '', 'Error', () );
 
-my ( $AUBBC_VERSION, %Build_AUBBC ) = ( '1.20', () );
+my ( $AUBBC_VERSION, %Build_AUBBC ) = ( '1.30', () );
 
 my %AUBBC = (
 aubbc => 1,
@@ -368,20 +368,21 @@ warn "END check_build_tag" if $DEBUG_AUBBC;
 
 sub add_build_tag {
 my ($self,%NewTag) = @_;
-#$name,$pattern,$type,$fn
 warn "ENTER add_build_tag $self" if $DEBUG_AUBBC;
-   unless (defined("&$NewTag{function}") && (ref $NewTag{function} eq 'CODE' || ref $NewTag{function} eq '')) {
-    die "Usage: do_build_tag 'no function named' => $NewTag{function}";
+
+   unless (exists $NewTag{function} && exists &{$NewTag{function}}
+        && (ref $NewTag{function} eq 'CODE' || ref $NewTag{function} eq '')) {
+    die "Usage: add_build_tag - function 'Undefined subroutine' => '$NewTag{function}'";
   }
+
   $NewTag{pattern} = 'l' if ($NewTag{type} eq 3);
-  # all, l, n, \_, \:, \s, \- (delimiter \,)
-  if ($NewTag{name} =~ m/\A[a-z0-9]+\z/i && ($NewTag{pattern} =~ m/\A[lns_:\-,]+\z/i || $NewTag{pattern} eq 'all')) {
+
+  if ($NewTag{name} =~ m/\A[a-z0-9-_]+\z/i && ($NewTag{pattern} =~ m/\A[lns_:\-,]+\z/i || $NewTag{pattern} eq 'all')) {
          $Build_AUBBC{"$NewTag{name}"} = $NewTag{pattern} . '||' . $NewTag{type} . '||' . $NewTag{function} if ($NewTag{name} && $NewTag{pattern} && $NewTag{type});
        warn "Added Build_AUBBC Tag ".$Build_AUBBC{"$NewTag{name}"} if $DEBUG_AUBBC && $Build_AUBBC{"$NewTag{name}"};
-
   }
    else {
-         die "Pattern: do_build_tag 'Bad name or pattern format'";
+         die "Usage: add_build_tag - Bad name or pattern format";
        }
 warn "ENTER add_build_tag $self" if $DEBUG_AUBBC;
 }

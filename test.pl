@@ -1,5 +1,3 @@
-
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
 
@@ -7,31 +5,46 @@
 
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
-my ( $loaded, $aubbc ) = ( 0, '' );
 
-BEGIN { $| = 1;  print "1..3\n"; }
+my ($message, $setting, $aubbc, $Current_version, %msg) =
+        ('[br][utf://x23]', '', '', '', (1 => "Test ok ", 2 => "Test error ", ) );
+
+BEGIN {
+        $| = 1;
+        print "Test's 1 to 4\n";
+}
+
 END {
-        if (!$loaded) {
-                print "not ok 3\n";
-                }
-                 else {
-                        print "ok 3\n";
-                        }
+        # did we get a setting?
+        #$setting = 5; # reinforce failure
+        $setting eq ' /'
+                ? print $msg{1} . "3\n"
+                : print $msg{2} . "3\n";
+                
+        # did we get the version?
+        #$Current_version = 5; # reinforce failure
+        $Current_version eq '1.30'
+                ? print $msg{1} . "4\n"
+                : print $msg{2} . "4\n";
 }
 
 use AUBBC;
 $aubbc = new AUBBC;
-$loaded = 1 if $aubbc;
-print "ok 1\n" if $aubbc;
 {
+        # did it load?
+        #$aubbc = ''; # main reinforce failure
+        $aubbc
+                ? print $msg{1} . "1\n"
+                : print $msg{2} . "1\n";
 
-        my $Current_version = $aubbc->version() || 0;
+        $aubbc->settings(html_type => 'xhtml') if $aubbc;
+        $message = $aubbc->do_all_ubbc($message) if $aubbc;
+        $setting = $aubbc->get_setting('html_type') if $aubbc;
+        $Current_version = $aubbc->version() if $aubbc;
 
- if ($Current_version) {
-      print "ok 2\n";
- }
- else {
-      print "not ok 2\n";
- }
-
+        # did it convert?
+        #$message .= ']'; # reinforce failure
+        $message !~ m/[\[\]\:]+/
+                ? print $msg{1} . "2\n"
+                : print $msg{2} . "2\n";
 }

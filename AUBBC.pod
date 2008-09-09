@@ -428,6 +428,14 @@ Returns the current version of the module.
 
 =head1 History
 
+v1.30 - 09/08/2008 14:12:10
+
+Fixed the function check in add_build_tag(), when the 1.20 changes where made this check was neglected
+
+Edited add_build_tag() Error messages, hopefully they make more sence.
+
+Now add_build_tag() name allows - and _ in it.
+
 v1.20 - 09/07/2008 09:23:09
 
 Fixed bug that bypassed utf tag converter if square bracket wasn't detected
@@ -474,7 +482,7 @@ Released.
 
 =head1 COPYLEFT
 
- AUBBC.pm, v1.20 09/07/2008 09:23:09 By: N.K.A
+ AUBBC.pm, v1.30 09/07/2008 09:23:09 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 

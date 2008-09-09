@@ -17,7 +17,7 @@ $aubbc->settings( protect_email => 4 );
         name     => $tag,
         pattern  => 'all',
         type     => 1,
-        function => 'main::other_sites',
+        function =>'main::other_sites',
         );
   }
 
@@ -27,7 +27,7 @@ $aubbc->settings( protect_email => 4 );
         type     => 3,
         function => 'main::other_sites',
         );
-        
+
 # The list
 my $message = <<HTML;
 [br][b]The Very common UBBC Tags[/b][br]
