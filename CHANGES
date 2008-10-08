@@ -1,5 +1,23 @@
 Improvement history for AUBBC
 
+v2.0 - 10/07/2008 13:52:11
+
+Fixed single tag [name] for build tags
+
+Changed the regex in plain URL's
+
+Removed bad patter setting and now using a more standard way to detect bad image tags
+
+Fixed dynamic view in XHTML for the protect email method.
+
+Added js_print method which will print out the javascript needed for the new protect email method
+
+Added values for the code highlighter so it can support CSS classes
+
+Added highlighting of variables and changed 2 quote regex to allow multi line quotes
+
+and a few other things that make this 2.0
+
 v1.30 - 09/08/2008 14:12:10
 
 Fixed the function check in add_build_tag(), when the 1.20 changes where made this check was neglected

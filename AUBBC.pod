@@ -4,8 +4,7 @@ AUBBC
 
 =head1 Description
 
-AUBBC - (Advanced Universal Bulletin Board Code)
- Tags used to create formatting effects in HTML & XHTML.
+Advanced Universal Bulletin Board Code Tags used to create formatting effects in HTML or XHTML.
 
 =head1 Abstract
 
@@ -48,9 +47,16 @@ This is a list of Default settings and the method to change them when needed.
         href_class => '',
         quote_class => '',
         quote_extra => '',
-        bad_pattern => 'view\-source:|script:|mocha:|mailto:|about:|shell:|\.js',
         script_escape => 1,
         protect_email => 1,
+        email_message => '&#67;&#111;&#110;&#116;&#97;&#99;&#116;&#32;&#69;&#109;&#97;&#105;&#108;',
+        highlight_class1 => '',
+        highlight_class2 => '',
+        highlight_class3 => '',
+        highlight_class4 => '',
+        highlight_class5 => '',
+        highlight_class6 => '',
+        highlight_class7 => '',
       );
 
 =head2 aubbc
@@ -215,10 +221,6 @@ example:
   quote_extra => 'QUOTES AND SAYINGS DISPLAYED ON THIS BLOG ARE NOT WRITTEN BY THE AUTHOR OF THE BLOG.',
   quote_extra => '<div style="clear: left"> </div>',
 
-=head2 bad_pattern
-
-Default is 'view\-source:|script:|mocha:|mailto:|about:|shell:|\.js' and this restricts the use of characters used in all [img] tags.
-
 =head2 script_escape
 
 This will turn on or off the sanitizer/escape security for the hole message.
@@ -249,15 +251,41 @@ can result is a security compromise of the AUBBC tags.
         1 - uses unicode type protection.
 
 
-        2 - uses javascript and unicode type protection.
+        2 - Javascript and unicode type protection.
 
 
-        3 - Javascript, random function and var names and unicode type protection.
+        3 - Javascript and unicode type protection.
 
 
-        4 - Javascript encryption with random function and var names
+        4 - Javascript encryption
 
+=head2 email_message
 
+When the protect_email setting is 2, 3 or 4 it will display this message as the link.
+
+Default message is '&#67;&#111;&#110;&#116;&#97;&#99;&#116;&#32;&#69;&#109;&#97;&#105;&#108;' and that say's 'Contact Email'
+
+=head2 highlight_class#
+
+This is for using your own class or font color for the code highlighter.
+
+example:
+
+        highlight_class1 => ' class="highlightclass1"',
+
+highlight_class1 = String quote
+
+highlight_class2 = Comment's
+
+highlight_class3 = String quote
+
+highlight_class4 = String quote
+
+highlight_class5 = Number's
+
+highlight_class6 = Operator, Function and other Name's
+
+highlight_class7 = Variables
 
 =head1 Smilies Settings
 
@@ -428,6 +456,24 @@ Returns the current version of the module.
 
 =head1 History
 
+v2.0 - 10/07/2008 13:52:11
+
+Fixed single tag [name] for build tags
+
+Changed the regex in plain URL's
+
+Removed bad patter setting and now using a more standard way to detect bad image tags
+
+Fixed dynamic view in XHTML for the protect email method.
+
+Added js_print method which will print out the javascript needed for the new protect email method
+
+Added values for the code highlighter so it can support CSS classes
+
+Added highlighting of variables and changed 2 quote regex to allow multi line quotes
+
+and a few other things that make this 2.0
+
 v1.30 - 09/08/2008 14:12:10
 
 Fixed the function check in add_build_tag(), when the 1.20 changes where made this check was neglected
@@ -482,7 +528,7 @@ Released.
 
 =head1 COPYLEFT
 
- AUBBC.pm, v1.30 09/07/2008 09:23:09 By: N.K.A
+ AUBBC.pm, v2.0 10/07/2008 13:52:11 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 

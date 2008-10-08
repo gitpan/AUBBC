@@ -1,7 +1,7 @@
 package AUBBC;
 =head1 COPYLEFT
 
- AUBBC.pm, v1.30 09/07/2008 14:12:10 By: N.K.A
+ AUBBC.pm, v2.00 10/07/2008 By: N.K.A
 
  Advanced Universal Bulletin Board Code Tags.
 
@@ -14,7 +14,7 @@ use warnings;
 
 our ( $DEBUG_AUBBC, $BAD_MESSAGE, %SMILEYS ) = ( '', 'Error', () );
 
-my ( $AUBBC_VERSION, %Build_AUBBC ) = ( '1.30', () );
+my ( $VERSION, %Build_AUBBC ) = ( '2.0', () );
 
 my %AUBBC = (
 aubbc => 1,
@@ -37,9 +37,16 @@ code_extra => '',
 href_class => '',
 quote_class => '',
 quote_extra => '',
-bad_pattern => 'view\-source:|script:|mocha:|mailto:|about:|shell:|\.js',
 script_escape => 1,
 protect_email => 1,
+email_message => '&#67;&#111;&#110;&#116;&#97;&#99;&#116;&#32;&#69;&#109;&#97;&#105;&#108;',
+highlight_class1 => '',
+highlight_class2 => '',
+highlight_class3 => '',
+highlight_class4 => '',
+highlight_class5 => '',
+highlight_class6 => '',
+highlight_class7 => '',
 );
 
 sub new {
@@ -102,29 +109,28 @@ my ($self,$name) = @_;
 sub code_highlight {
     my $text_code = shift;
     warn "START code_highlight" if $DEBUG_AUBBC;
-    $text_code =~ s~<br$AUBBC{html_type}>~=br$AUBBC{html_type}=~gso;
-    $text_code =~ s!:!&#58;!go;
-    $text_code =~ s!\[!&#91;!go;
-    $text_code =~ s!\]!&#93;!go;
-    $text_code =~ s!\{!&#123;!go;
-    $text_code =~ s!\}!&#125;!go;
-    $text_code =~ s!%!&#37;!go;
-    $text_code =~ s!\s{1};! &#59;!go; # ;
+    $text_code =~ s{:}{&#58;}go;
+    $text_code =~ s{\[}{&#91;}go;
+    $text_code =~ s{\]}{&#93;}go;
+    $text_code =~ s{\{}{&#123;}go;
+    $text_code =~ s{\}}{&#125;}go;
+    $text_code =~ s{%}{&#37;}go;
+    $text_code =~ s{\s{1};}{ &#59;}go;
     $text_code =~ s{&lt;}{&#60;}go;
     $text_code =~ s{&gt;}{&#62;}go;
     $text_code =~ s{&quot;}{&#34;}go;
 if ($AUBBC{highlight}) {
     warn "START block highlight" if $DEBUG_AUBBC;
-    $text_code =~ s{\z}{=br$AUBBC{html_type}=}go if $text_code !~ m/=br$AUBBC{html_type}=\z/io; # fix
-    $text_code =~ s!(&#60;&#60;(\w+);.*?\b\2\b)!<font color=DarkRed>$1</font>!go;
-    $text_code =~ s{(?<![\&\$])(\#.*?(?:=br$AUBBC{html_type}=))}{<font color='#0000FF'><i>$1</i></font>}igo;
-    $text_code =~ s{(&#39;.*?(?:&#39;|=br$AUBBC{html_type}=))}{<font color='#8B0000'>$1</font>}go;
-    $text_code =~ s{(&#34;.*?(?:&#34;|=br$AUBBC{html_type}=))}{<font color='#8B0000'>$1</font>}go;
-    $text_code =~ s{(?<![\#|\w|\d])(\d+)(?!\w)}{<font color='#008000'>$1</font>}go;
-    $text_code =~ s!\b(strict|package|return|require|for|my|sub|if|eq|ne|lt|ge|le|gt|or|use|while|foreach|next|last|unless|elsif|else|not|and|until|continue|do|goto)\b!<b>$1</b>!go;
+    $text_code =~ s{\z}{<br$AUBBC{html_type}>}go if $text_code !~ m/<br$AUBBC{html_type}>\z/io;
+    $text_code =~ s{(&#60;&#60;(\w+);.*?\b\2\b)}{<font$AUBBC{highlight_class1}>$1</font>}go;
+    $text_code =~ s{(?<![\&\$])(\#.*?(?:<br$AUBBC{html_type}>))}{<font$AUBBC{highlight_class2}>$1</font>}igo;
+    $text_code =~ s{(&#39;(?s).*?(?<!&#92;)&#39;)}{<font$AUBBC{highlight_class3}>$1</font>}go;
+    $text_code =~ s{(&#34;(?s).*?(?<!&#92;)&#34;)}{<font$AUBBC{highlight_class4}>$1</font>}go;
+    $text_code =~ s{(?<![\#|\w|\d])(\d+)(?!\w)}{<font$AUBBC{highlight_class5}>$1</font>}go;
+    $text_code =~ s{\b(strict|package|return|require|for|my|sub|if|eq|ne|lt|ge|le|gt|or|xor|use|while|foreach|next|last|unless|elsif|else|not|and|until|continue|do|goto)\b}{<font$AUBBC{highlight_class6}>$1</font>}go;
+    $text_code =~ s{(?<!&#92;)((?:&#37;|\$|\@)\w+(?:(?:&#91;.+?&#93;|&#123;.+?&#125;)+|))}{<font$AUBBC{highlight_class7}>$1</font>}go; # bug- doesnt convert ALL only most
     warn "END block highlight" if $DEBUG_AUBBC;
     }
-    $text_code =~ s~=br$AUBBC{html_type}=~<br$AUBBC{html_type}>~gso;
     warn "END code_highlight" if $DEBUG_AUBBC;
     return $text_code;
 }
@@ -152,39 +158,37 @@ sub do_ubbc {
         while ($message =~ s{\[(img|right_img|left_img)\](.+?)\[/img\]} {
                         my $tmp = $2;
                         my $tmp2 = $1;
-                          if ($tmp =~ m!($AUBBC{bad_pattern})!i || $tmp =~ m!#!i) {
-                               $tmp = qq(\[<font color=red>$BAD_MESSAGE<\/font>\]$tmp2);
+                          if ($tmp !~ m/\A(?:\w+:\/\/|\/)/i || $tmp =~ m/(?:\#|\.\bjs\b)/i) {
+                               $tmp = "[<font color=red>$BAD_MESSAGE</font>]$tmp2";
                           }
                           else {
                                if ($AUBBC{icon_image}) {
-                                    if($tmp2 eq 'img') { $tmp = qq(<img src="$tmp" width="$AUBBC{image_width}" height="$AUBBC{image_hight}" alt="" border="$AUBBC{image_border}"$AUBBC{html_type}>$AUBBC{image_wrap}); }
-                                    elsif($tmp2 eq 'right_img') { $tmp = qq(<img align="right" hspace="5" src="$tmp" border="$AUBBC{image_border}" width="$AUBBC{image_width}" height="$AUBBC{image_hight}" alt=""$AUBBC{html_type}>$AUBBC{image_wrap}); }
-                                    elsif($tmp2 eq 'left_img') { $tmp = qq(<img align="left" hspace="5" src="$tmp" border="$AUBBC{image_border}" width="$AUBBC{image_width}" height="$AUBBC{image_hight}" alt=""$AUBBC{html_type}>$AUBBC{image_wrap}); }
+                                    if($tmp2 eq 'img') { $tmp = "<a href=\"$tmp\"$AUBBC{href_target}$AUBBC{href_class}><img src=\"$tmp\" width=\"$AUBBC{image_width}\" height=\"$AUBBC{image_hight}\" alt=\"\" border=\"$AUBBC{image_border}\"$AUBBC{html_type}></a>$AUBBC{image_wrap}"; }
+                                    elsif($tmp2 eq 'right_img') { $tmp = "<a href=\"$tmp\"$AUBBC{href_target}$AUBBC{href_class}><img align=\"right\" src=\"$tmp\" border=\"$AUBBC{image_border}\" width=\"$AUBBC{image_width}\" height=\"$AUBBC{image_hight}\" alt=\"\"$AUBBC{html_type}></a>$AUBBC{image_wrap}"; }
+                                    elsif($tmp2 eq 'left_img') { $tmp = "<a href=\"$tmp\"$AUBBC{href_target}$AUBBC{href_class}><img align=\"left\" src=\"$tmp\" border=\"$AUBBC{image_border}\" width=\"$AUBBC{image_width}\" height=\"$AUBBC{image_hight}\" alt=\"\"$AUBBC{html_type}></a>$AUBBC{image_wrap}"; }
                                   }
                                    else {
-                                    if($tmp2 eq 'img') { $tmp = qq(<img src="$tmp" alt="" border="$AUBBC{image_border}"$AUBBC{html_type}>$AUBBC{image_wrap}); }
-                                    elsif($tmp2 eq 'right_img') { $tmp = qq(<img align="right" hspace="5" src="$tmp" border="$AUBBC{image_border}" alt=""$AUBBC{html_type}>$AUBBC{image_wrap}); }
-                                    elsif($tmp2 eq 'left_img') { $tmp = qq(<img align="left" hspace="5" src="$tmp" border="$AUBBC{image_border}" alt=""$AUBBC{html_type}>$AUBBC{image_wrap}); }
+                                    if($tmp2 eq 'img') { $tmp = "<img src=\"$tmp\" alt=\"\" border=\"$AUBBC{image_border}\"$AUBBC{html_type}>$AUBBC{image_wrap}"; }
+                                    elsif($tmp2 eq 'right_img') { $tmp = "<img align=\"right\" src=\"$tmp\" border=\"$AUBBC{image_border}\" alt=\"\"$AUBBC{html_type}>$AUBBC{image_wrap}"; }
+                                    elsif($tmp2 eq 'left_img') { $tmp = "<img align=\"left\" src=\"$tmp\" border=\"$AUBBC{image_border}\" alt=\"\"$AUBBC{html_type}>$AUBBC{image_wrap}"; }
                                    }
                           }
                 }exisog) {}
 
         # Email
-        #$message =~ s~\[email\]($AUBBC{bad_pattern})\[/email\]~\[<font color=red>$BAD_MESSAGE<\/font>\]email~isgo;
-        $message =~ s~\[email\](?!([a-z\d\.\-\_\&]+)\@([a-zA-Z\d\.\-\_]+)).+?\[/email\]~\[<font color=red>$BAD_MESSAGE<\/font>\]email~isgo;
+        $message =~ s~\[email\](?![\w\.\-\&]+\@[\w\.\-]+).+?\[/email\]~\[<font color=red>$BAD_MESSAGE<\/font>\]email~isgo;
         if ($AUBBC{protect_email}) {
         # Protect email address.
-        $message =~ s/\[email\]([a-z\d\.\-\_\&]+\@[a-zA-Z\d\.\-\_]+)\[\/email\]/
-        my $protect_email = protect_email($1, $AUBBC{protect_email});
-        $protect_email
+        $message =~ s/\[email\]([\w\.\-\&]+\@[\w\.\-]+)\[\/email\]/
+                $self->protect_email($1, $AUBBC{protect_email});
         /exig;
         }
          else {
          # Standard
-                $message =~ s~\[email\]([a-z\d\.\-\_\&]+\@[a-zA-Z\d\.\-\_]+)\[/email\]~<A href="mailto:$1"$AUBBC{href_class}>$1</a>~isgo;
+                $message =~ s~\[email\]([\w\.\-\&]+\@[\w\.\-]+)\[/email\]~<A href="mailto:$1"$AUBBC{href_class}>$1</a>~isgo;
               }
 
-        $message =~ s~\[color=([\w#]+)\](.*?)\[/color\]~<font color='$1'>$2</font>~isgo;
+        $message =~ s~\[color=([\w#]+)\](.*?)\[/color\]~<font color="$1">$2</font>~isgo;
         $message =~ s~\[quote=([\w\s]+)\]~<span$AUBBC{quote_class}><small><b><u>$1:</u></b></small><br$AUBBC{html_type}>~isgo;
         $message =~ s~\[/quote\]~</span>$AUBBC{quote_extra}~isgo;
         $message =~ s~\[quote\]~<span$AUBBC{quote_class}>~isgo;
@@ -192,21 +196,18 @@ sub do_ubbc {
         $message =~ s~\[\/right\]~</div>~isgo;
         $message =~ s~\[left\]~<div align=\"left\">~isgo;
         $message =~ s~\[\/left\]~</div>~isgo;
-
-        $message =~ s~\[li\]~<li>~isgo;
         $message =~ s~\[li=(\d+)\]~<li value="$1">~isgo;
-        $message =~ s~\[/li\]~</li>~isgo;
 
         # 1 = <1>...</1>, 2 = <2>
         my %AUBBC_TAGS =('b' => 1,'br' => 2,'hr' => 2,'i' => 1,'sub' => 1,'sup' => 1,'pre' => 1,'u' => 1,'strike' => 1,'center' => 1,
-        'ul' => 1, 'ol' => 1, 'small' => 1, 'big' => 1,);
+        'ul' => 1, 'ol' => 1, 'small' => 1, 'big' => 1, 'li' => 1,);
         foreach my $a_key (keys %AUBBC_TAGS) {
                 if ($AUBBC_TAGS{$a_key} eq 1) {
                      $message =~ s{\[$a_key\]}{<$a_key>}gs;
                      $message =~ s{\[\/$a_key\]}{<\/$a_key>}gs;
                 }
                  elsif ($AUBBC_TAGS{$a_key} eq 2) {
-                         $message =~ s~\[$a_key\]~<$a_key$AUBBC{html_type}>~sg;
+                         $message =~ s{\[$a_key\]}{<$a_key$AUBBC{html_type}>}sg;
                  }
         }
 
@@ -215,92 +216,58 @@ sub do_ubbc {
         $message =~
             s~\[url\](\w+\://.+?)\[/url\]~<a href="$1"$AUBBC{href_target}$AUBBC{href_class}>$1</a>~isgo;
         $message =~
-            s~(?:(?<![\w\"\=\{\[\]])|[\n\b]|\A)\\*(\w+://[\w\~\.\;\:\,\$\-\+\!\*\?/\=\&\@\#\%]+[\w\~\.\;\:\$\-\+\!\*\?/\=\&\@\#\%])~<a href="$1"$AUBBC{href_target}$AUBBC{href_class}>$1</a>~isgo;
+            s{(?<![\[\{"=\'])(\b\w+\b://[\w\~\.\;\:\,\$\-\+\!\*\?/\=\&\@\#\%]+)}{<a href="$1"$AUBBC{href_target}$AUBBC{href_class}>$1</a>}isgo;
         $message =~
-            s~(?:(?<![\"\=\[\]/\:\.])|[\n\b]|\A)\\*(www\.[\w\~\.\;\:\,\$\-\+\!\*\?/\=\&\@\#\%]+[\w\~\.\;\:\$\-\+\!\*\?/\=\&\@\#\%])~<a href="http://$1"$AUBBC{href_target}$AUBBC{href_class}>$1</a>~isgo;
+            s{(?<!["=\./\'])(\bwww\b\.[\w\~\.\;\:\,\$\-\+\!\*\?/\=\&\@\#\%]+)}{<a href="http://$1"$AUBBC{href_target}$AUBBC{href_class}>$1</a>}isgo;
         warn "END do_ubbc $self" if $DEBUG_AUBBC;
         return $message;
 }
 
 sub protect_email {
-my ($email, $option) = @_;
-my $protect_email = '';
+my ($self, $email, $option) = @_;
 my @key64 = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/');
-if ($option eq 1) {
- # none Javascript
- my @letters = split (//, $email);
+my ($email1, $email2, $ran_num, $protect_email, @letters) =
+('', '', '', '', split (//, $email));
+   $protect_email = '[' if $option eq 3 || $option eq 4;
  foreach my $character (@letters) {
-          $protect_email .= '&#' . ord($character) . ';';
+          $protect_email .= '&#' . ord($character) . ';' if ($option eq 1 || $option eq 2);
+          $protect_email .= ord($character) . ',' if $option eq 3;
+          $ran_num = int(rand(64)) || 0 if $option eq 4;
+          $protect_email .= '\'' . (ord($key64[$ran_num]) ^ ord($character)) . '\',\'' . $key64[$ran_num] . '\',' if $option eq 4;
  }
-  $protect_email = '<A href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;' . $protect_email . "\"$AUBBC{href_class}>" . $protect_email . '</a>';
-}
- elsif ($option eq 2) {
- # Javascript
- my @letters = split (//, $email);
- foreach my $character (@letters) {
-          $protect_email .= '&#' . ord($character) . ';';
- }
- my ($email1, $email2) = split ("&#64;", $protect_email);
-        $protect_email = <<JS;
-<script language="javascript"><!--
-document.write("<a href=" + "&#109;&#97;" + "&#105;&#108;" + "&#116;&#111;&#58;" + "$email1" + "&#64;" + "$email2" + "$AUBBC{href_class}>" + "$email1" + "&#64;" + "$email2" + "</a>")
-//--></script>
+  return "<a href=\"&#109;&#97;&#105;&#108;&#116;&#111;&#58;$protect_email\"$AUBBC{href_class}>$protect_email</a>" if $option eq 1;
+
+ ($email1, $email2) = split ("&#64;", $protect_email) if $option eq 2;
+ $protect_email = "'$email1' + '&#64;' + '$email2'" if $option eq 2;
+ $protect_email =~ s/\,\z/]/g if $option eq 3 || $option eq 4;
+        return <<JS if $option eq 2 || $option eq 3 || $option eq 4;
+<a href="javascript:MyEmCode('$option',$protect_email);"$AUBBC{href_class}>$AUBBC{email_message}</a>
 JS
- }
-  elsif ($option eq 3) {
-  # A Javascript, random function and var names
-  my $random_id = random_39();
-   my @letters = split (//, $email);
-   $protect_email = 'var c' . $random_id . ' = String.fromCharCode(109,97,105,108,116,111,58';
-   my $name_protect = 'var b' . $random_id . ' = String.fromCharCode(160';
- foreach my $character (@letters) {
-          $protect_email .= ',' . ord($character);
-          $name_protect .= ',' . ord($character);
- }
- $protect_email .= ');';
- $name_protect .= ',160);';
-        $protect_email = <<JS;
-<script language="javascript"><!--
-function a$random_id () {
-$protect_email
- window.location=c$random_id;
-};
-$name_protect
-document.write("<a href=\\"javascript:a$random_id();\\"" + "$AUBBC{href_class}>" + b$random_id + "</a>")
-//--></script>
-JS
-  }
-   elsif ($option eq 4) {
-   # A Javascript encryption with random function and var names
-   my ($random_id, @letters)  = ( random_39(), split(//, "mailto:$email") );
-   my $prote = 'var c' . $random_id . ' = new Array(';
-   foreach my $charect (@letters) {
-           my $ran_num = int(rand(64)) || 0;
-           $prote .= '\'' . (ord($key64[$ran_num]) ^ ord($charect)) . '\',\'' . $key64[$ran_num] . '\',';
-           }
-   $prote =~ s/\,\z/);/g;
-   $protect_email = <<JS;
-<script type='text/javascript'>
-$prote
-var f$random_id= new Array('',c$random_id.length,1,'');
-    for(f$random_id\[2];f$random_id\[2]<f$random_id\[1];f$random_id\[2]++) {
-        f$random_id\[0]+=String.fromCharCode(c$random_id\[f$random_id\[2]].charCodeAt(0)^c$random_id\[f$random_id\[2]-1]);f$random_id\[2]++;
-    };
-f$random_id\[3]=f$random_id\[0].replace(/^\\w+\\W/g, "");
-document.write("<a href=\\"" + f$random_id\[0] + "\\"$AUBBC{href_class}>" + f$random_id\[3] + "</a>");
-</script>
-JS
-   }
-return $protect_email;
+
 }
 
-sub random_39 {
-  my (@seed, $random_id) = ( ('a'..'f','0'..'9'), '' );
-  rand(time ^ $$);
-  for (my $i = 0; $i < 39; $i++) {
-       $random_id .= $seed[int(rand($#seed + 1))];
-  }
-  return $random_id;
+sub js_print {
+my $self = shift;
+print "Content-type: text/javascript\n\n";
+print <<JS;
+/*
+AUBBC v$VERSION
+Fully supports dynamic view in XHTML.
+Recomended to copy this script and place the code in its own aubbc.js file.
+*/
+function MyEmCode (type, content) {
+var returner = '';
+if (type == 4) {
+var farray= new Array(content.length,1);
+    for(farray[1];farray[1]<farray[0];farray[1]++) {
+        returner+=String.fromCharCode(content[farray[1]].charCodeAt(0)^content[farray[1]-1]);farray[1]++;
+    }
+} else if (type == 3) {
+  for (i = 0; i < content.length; i++) { returner+=String.fromCharCode(content[i]); }
+ } else if (type == 2) { returner=content; }
+ if (returner) { window.location='mailto:'+returner; }
+}
+JS
 }
 
 sub do_build_tag {
@@ -314,17 +281,18 @@ my ($self,$message) = @_;
          }
          warn "Build tags $uabbc_settings";
         }
-
+            my ($pattern,$type,$fn,$build_pat,$p_ct,@pat_split) =
+                ('','','','',0, () );
     foreach my $b_key (keys %Build_AUBBC) {
              warn "ENTER foreach do_build_tag $self" if $DEBUG_AUBBC;
-             my ($pattern, $type, $fn) = split (/\|\|/, $Build_AUBBC{$b_key});
-             my $build_pat = '';
+             ($pattern, $type, $fn) = split (/\|\|/, $Build_AUBBC{$b_key});
+             $build_pat = '';
              if ($pattern eq 'all') {
-                    $build_pat = 'a-z\d\:\-\s\_\/\.\;\&\=\?\-\+\#\%\~\,\|';
+                    $build_pat = '\w\:\s\/\.\;\&\=\?\-\+\#\%\~\,';
                     }
                      else {
-                     my @pat_split = split (/\,/, $pattern);
-                     my $p_ct = 0;
+                     @pat_split = split (/\,/, $pattern);
+                     $p_ct = 0;
                          foreach my $pat_is (@pat_split) {
                                  last if $p_ct == 6;
                                  $p_ct++;
@@ -337,17 +305,17 @@ my ($self,$message) = @_;
                          }
                      }
              $message =~ s/(\[$b_key\:\/\/([$build_pat]+)\])/
-              my $ret = check_build_tag( $b_key, $2 , $fn ) || '';
+              my $ret = $self->do_sub( $b_key, $2 , $fn ) || '';
               $ret ? $ret : $1;
               /exig if ($type eq 1);
 
              $message =~ s/(\[$b_key\]([$build_pat]+)\[\/$b_key\])/
-              my $ret = check_build_tag( $b_key, $2 , $fn ) || '';
+              my $ret = $self->do_sub( $b_key, $2 , $fn ) || '';
               $ret ? $ret : $1;
               /exig if ($type eq 2);
 
              $message =~ s/(\[$b_key\])/
-              my $ret = check_build_tag( $b_key, '' , $fn ) || '';
+              my $ret = $self->do_sub( $b_key, '' , $fn ) || '';
               $ret ? $ret : $1;
               /exig if ($type eq 3);
      }
@@ -355,15 +323,12 @@ my ($self,$message) = @_;
     return $message;
 }
 
-sub check_build_tag {
-my ($key, $term, $fun) = @_;
+sub do_sub {
+my ($self, $key, $term, $fun) = @_;
 warn "ENTER check_build_tag" if $DEBUG_AUBBC;
-return '' if !$term || !$fun;
-no strict 'refs';
-my $vid = $fun->($key, $term) || '';
-use strict 'refs';
+$fun = \&{$fun};
 warn "END check_build_tag" if $DEBUG_AUBBC;
-(!$vid) ? return '' : return $vid;
+return $fun->($key, $term) || '';
 }
 
 sub add_build_tag {
@@ -377,7 +342,7 @@ warn "ENTER add_build_tag $self" if $DEBUG_AUBBC;
 
   $NewTag{pattern} = 'l' if ($NewTag{type} eq 3);
 
-  if ($NewTag{name} =~ m/\A[a-z0-9-_]+\z/i && ($NewTag{pattern} =~ m/\A[lns_:\-,]+\z/i || $NewTag{pattern} eq 'all')) {
+  if ($NewTag{name} =~ m/\A[\w\-]+\z/i && ($NewTag{pattern} =~ m/\A[lns_:\-,]+\z/i || $NewTag{pattern} eq 'all')) {
          $Build_AUBBC{"$NewTag{name}"} = $NewTag{pattern} . '||' . $NewTag{type} . '||' . $NewTag{function} if ($NewTag{name} && $NewTag{pattern} && $NewTag{type});
        warn "Added Build_AUBBC Tag ".$Build_AUBBC{"$NewTag{name}"} if $DEBUG_AUBBC && $Build_AUBBC{"$NewTag{name}"};
   }
@@ -431,6 +396,7 @@ sub smiley_hash {
 sub do_all_ubbc {
     my ($self,$message) = @_;
     warn "ENTER do_all_ubbc $self" if $DEBUG_AUBBC;
+    return '' if ! $message;
     if (!$AUBBC{no_bypass} && $message =~ s/\A\#none//go) {
         warn "START&END no_bypass $self" if $DEBUG_AUBBC;
         $message = $self->script_escape($message) if $AUBBC{script_escape};
@@ -445,7 +411,7 @@ sub do_all_ubbc {
 
     $message = (!$AUBBC{no_bypass} && $message =~ s/\A\#nobuild//go)
         ? $message
-        : $self->do_build_tag($message) if !$AUBBC{for_links} && %Build_AUBBC;
+        : $self->do_build_tag($message) if !$AUBBC{for_links} && keys %Build_AUBBC;
 
     $message = (!$AUBBC{no_bypass} && $message =~ s/\A\#noutf//go)
         ? $message
@@ -527,7 +493,7 @@ warn "END html_to_text $self" if $DEBUG_AUBBC;
 }
 sub version {
 my ($self) = @_;
-     return $AUBBC_VERSION;
+     return $VERSION;
 }
 
 1;
