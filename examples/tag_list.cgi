@@ -1,8 +1,8 @@
-#!c:\Perl\bin\perl.exe
+#!perl
 
 use strict;
 use warnings;
-
+use lib '../';
 use AUBBC;
 my $aubbc = new AUBBC;
 
@@ -62,12 +62,15 @@ my $message = <<HTML;
 [sup]]Sup[[/sup] = [sup]Sup[/sup][br]
 [sub]]Sub[[/sub] = [sub]Sub[/sub][br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
-[img]]Image[[/img] = [img]/home1.png[/img][br]
-[right_img]]Image[[/img] = [right_img]/home1.png[/img][br]
-[left_img]]Image[[/img] = [left_img]/home1.png[/img][br][br][br]
+[img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
+[img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
+[right_img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
+[right_img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
+[left_img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
+[left_img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br][br]
 [url]]URL[[/url] = [url]http://google.com[/url][br]
 [url=URL]]Name[[/url] = [url=http://google.com]Google[/url][br]
-http&#58;//google.com = http://google.com[br]
+http[utf://#58]//google.com = http://google.com[br]
 www&#46;cpan.org = www.cpan.org[br]
 [email]]Email[/email] = [email]some\@email.com[/email] Recommended Not to Post your email in a public area[br]
 [code]]# Some Code ......
@@ -106,11 +109,11 @@ print \$hash{stuff}{'1'};[/code][br]
 [b]Entity names[/b][br]
 &iquest&#59; = &iquest;[br]
 [b]Built Tags[/b][br]
-[google://Google] Google Search[br]
-[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia[br]
-[wb://Wikibooks:About] or [wikibooks://Wikibooks:About] Wikibooks[br]
-[wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote[br]
-[ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource[br]
+[[google://Google] [google://Google] Search[br]
+[[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia[br]
+[[wb://Wikibooks:About] or [wikibooks://Wikibooks:About] Wikibooks[br]
+[[wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote[br]
+[[ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource[br]
 [cpan://Cpan] Cpan Module Search[br]
 [time] Time[br]
 HTML
@@ -124,12 +127,12 @@ print <<HTML;
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>AUBBC.pm Tag List</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 </head>
 <body>
 <script type="text/javascript" src="?js_print">
 </script>
 <style type="text/css">
-//<![CDATA[
 .codepost {
 background-color: #ffffff;
  width: 80%;
@@ -191,7 +194,6 @@ padding: 1px;
  text-decoration : none;
  font-family : Courier New, Latha, sans-serif;
 }
-//]]>
 </style>
 $message
 </body>
@@ -208,7 +210,7 @@ sub other_sites {
   my ($tag_name, $text_from_AUBBC) = @_;
 
   # cpan modules
-  $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
+  $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&amp;query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
 
   # wikipedia Wiki
   $text_from_AUBBC = "<a href=\"http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');

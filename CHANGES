@@ -1,5 +1,55 @@
 Improvement history for AUBBC
 
+v2.10 - 08/31/2010 11:17:13
+
+Addition - adding type 4 to add_build_tag this will use style 3 but will work
+different then the other built functions. Type 4 will print the text defined in
+function and not point to a defined Perl subroutine.
+
+Addition - added line_break setting to have control over the script_escape and
+html_to_text methods converting html line break <br> and new line \n
+
+Addition - added fix_amp this setting finds all the & that need to covert to the amp; html code name
+so the w3c xhtml validation checks ok.
+
+Addition - added no_img this setting will allow some control for using [img] tags
+for security reasons
+
+Fixed - bug in settings_prep when a setting gets changed html_type could change
+
+Fixed - Better support for XHTML 1.0 Strict for some tags having issues in do_ubbc
+
+Fixed - in do_ubbc the [url] tag produces a bug if a link is used as a name
+the fix converts the period and/or colon of the name so its not seen as a new
+link.
+
+Improvement - in do_unicode removed then changed the two regexs to do a 3 in 1 filter.
+
+Improvement - in html_to_text added a code to fix a <br> bug if ppl use html or xhtml line break.
+
+Improvement - moved the pattern building code from do_build_tag to add_build_tag
+so it only runs one time
+
+Improvement - in add_build_tag using a hash array to store the build tag data so
+there is no need to use split in do_build_tag
+
+Improvement - in do_all_ubbc moved script_escape to a location where one call
+to the function is needed
+
+Improvement - in do_all_ubbc added check for undefined "$message" variable
+
+Improvement - in script_escape added check for undefined "$text" variable
+
+Improvement - in html_to_text added check for undefined "$html" variable
+
+Improvement - in escape_aubbc converting the brackets one time with the html
+code name so the filter will only need to run one time in do_all_ubbc. This
+also fixes one bug in escape_aubbc
+
+Removed - In script_escape removed the \cM regex, it is very rare that anyone will need
+it so it wont be missed.
+
+
 v2.0 - 10/07/2008 13:52:11
 
 Fixed single tag [name] for build tags

@@ -1,7 +1,7 @@
 use ExtUtils::MakeMaker;
 WriteMakefile(
         'NAME' => "AUBBC",
-        'AUTHOR' => 'N. K. A. <sflex@cpan.org>',
+        'AUTHOR' => 'N. K. A. <shakaflex@gmail.com>',
         'VERSION_FROM' => 'AUBBC.pm',
-        'ABSTRACT' => 'Advanced Universal Bulletin Board Code Tags used to create formatting effects in HTML or XHTML.',
+        'ABSTRACT' => 'Advanced Universal Bulletin Board Code a Perl BBcode API',
 );
