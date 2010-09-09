@@ -1,5 +1,16 @@
 Improvement history for AUBBC
 
+v2.20 - 09/08/2010 19:40:55
+
+Addition - in examples folder there is a bench.pl to test the speed and support
+of all the Perl BBcode modules. BBCode::Parser Parse::BBCode HTML::BBCode HTML::BBReverse
+
+Fixed - fixed a line break and new line sandbox bug
+
+Improvement - Massive speed improvement to the hole module and no features lost.
+changed new for faster loading, the module uses vars for some variables,
+re-spaced the hole code.
+
 v2.10 - 08/31/2010 11:17:13
 
 Addition - adding type 4 to add_build_tag this will use style 3 but will work

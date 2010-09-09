@@ -1,3 +1,4 @@
+
 =head1 Name
 
 AUBBC
@@ -19,8 +20,9 @@ Advanced Universal Bulletin Board Code a Perl BBcode API
 
 =head1 Abstract
 
-The advantage of using this BBcode is to restrict the usage of HTML/XHTML elements and
-to make formating of posts easy to people that have no HTML/XHTML skill. Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
+The advantage of using this BBcode is to restrict the usage of HTML/XHTML
+elements and to make formating of posts easy to people that have no HTML/XHTML skill.
+Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
 
 This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
 Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
@@ -73,7 +75,7 @@ the tags, like name and pattern.
 
 See the other "Build your own tags" for usage
 
-=head XSS protection and settings
+=head2 XSS protection and settings
 
 The script_escape filter will disable XSS so the text of the code can be seen in
 HTML/XHTML and the XSS code will not work in anyway.
@@ -564,6 +566,17 @@ Returns the current version of the module.
 
 =head1 History
 
+v2.20 - 09/08/2010 19:40:55
+
+Addition - in examples folder there is a bench.pl to test the speed and support
+of all the Perl BBcode modules. BBCode::Parser Parse::BBCode HTML::BBCode HTML::BBReverse
+
+Fixed - fixed a line break and new line sandbox bug
+
+Improvement - Massive speed improvement to the hole module and no features lost.
+changed new for faster loading, the module uses vars for some variables,
+re-spaced the hole code.
+
 v2.10 - 08/31/2010 11:17:13
 
 Addition - adding type 4 to add_build_tag this will use style 3 but will work
@@ -686,7 +699,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v2.10 09/03/2010 By: N.K.A.
+AUBBC.pm, v2.20 - 09/08/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
