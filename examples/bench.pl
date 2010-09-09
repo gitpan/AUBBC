@@ -21,6 +21,12 @@ for my $key (keys %loaded) {
 my $code = <<'EOM';
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
+[[strong]Strong[[/strong] = [strong]Strong[/strong][br]
+[[small]Small[[/small] = [small]Small[/small][br]
+[[big]Big[[/big] = [big]Big[/big][br]
+[[h1]Head 1[[/h1] = [h1]Head 1[/h1][br]
+through.....[br]
+[[h6]Head 6[[/h6] = [h6]Head 6[/h6][br]
 [[i]Italic[[/i] = [i]Italic[/i][br]
 [[u]Underline[[/u] = [u]Underline[/u][br]
 [[strike]Strike[[/strike] = [strike]Strike[/strike][br]
@@ -57,8 +63,8 @@ print $hash{stuff}{'1'};[/c][br][br]
 [quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
 [color=Red]]Color[/color]] = [color=Red]Color[/color][br][br]
 [b]Unicode Support[/b][br]
-[utf://x3A3]] = [utf://x3A3][br]
-[utf://0931]] = [utf://0931][br]
+[utf://#x3A3]] = [utf://#x3A3][br]
+[utf://#0931]] = [utf://#0931][br]
 ? =  ?[br][br]
 [b]Entity names[/b][br]
 ¿ = ¿[br]
@@ -105,7 +111,7 @@ my $rendered2 = $tree->toHTML();
 my $rendered3 = $hb->parse($code);
 #print "HB\n$rendered3\n\n";
 my $rendered4 = $bbr->parse($code);
-#print "BBR\n$rendered4\n\n";
+print "BBR\n$rendered4\n\n";
 my $rendered5 = $au->do_all_ubbc($code);
 #print "AU\n$rendered5\n\n";
 

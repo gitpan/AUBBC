@@ -566,6 +566,10 @@ Returns the current version of the module.
 
 =head1 History
 
+v2.21 - 09/09/2010 16:32:34
+
+Fixed -  -withoutworldwriteables, bug with making an archive on windows to PAUSE.
+
 v2.20 - 09/08/2010 19:40:55
 
 Addition - in examples folder there is a bench.pl to test the speed and support
@@ -699,7 +703,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v2.20 - 09/08/2010 By: N.K.A.
+AUBBC.pm, v2.21 - 09/09/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 

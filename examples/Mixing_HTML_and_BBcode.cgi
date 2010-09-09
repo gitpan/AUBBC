@@ -1,4 +1,4 @@
-package Mixing_HTML_and_BBcode;
+#!perl
 
 =head1 COPYLEFT
 
@@ -123,5 +123,3 @@ $message3 =~ s{\<\/?aubbc\>}{}gsio;
 # or return the variable, how ever you want to make it!!
 }
 
-
-1;

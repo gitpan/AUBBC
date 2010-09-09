@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use vars qw(%Build_AUBBC %AUBBC %AUBBC_TAGS);
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 our $BAD_MESSAGE = 'Error';
 our $DEBUG_AUBBC = 0;
 our %SMILEYS = ();
@@ -442,7 +442,7 @@ __END__
 
 =head1 COPYLEFT
 
-AUBBC.pm, v2.20 09/08/2010 By: N.K.A.
+AUBBC.pm, v2.21 09/09/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 

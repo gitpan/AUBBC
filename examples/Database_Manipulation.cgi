@@ -1,4 +1,4 @@
-package Database_Manipulation;
+#!perl
 
 =head1 COPYLEFT
 
@@ -102,5 +102,3 @@ $message3 = $aubbc->do_all_ubbc($message3);
 # or return the variable, how ever you want to make it!!
 }
 
-
-1;
