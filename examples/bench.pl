@@ -17,7 +17,6 @@ for my $key (keys %loaded) {
     print "$key\t$loaded{$key}\n";
 }
 
-
 my $code = <<'EOM';
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
@@ -38,7 +37,7 @@ through.....[br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
 [img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
 [img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
-[url=URL]]Name[[/url] = [url=http://www.google.com]Google[/url][br]
+[url=URL]]Name[[/url] = [url=http://www.google.com]http://www.google.com[/url][br]
 http[utf://#58]//google.com = http://google.com[br]
 [email]]Email[/email] = [email]some@email.com[/email] Recommended Not to Post your email in a public area[br]
 [code]]# Some Code ......
@@ -61,13 +60,14 @@ my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
 print $hash{stuff}{'1'};[/c][br][br]
 [quote]]Quote[/quote]] = [quote]Quote[/quote][br]
 [quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
-[color=Red]]Color[/color]] = [color=Red]Color[/color][br][br]
+[color=Red]]Color[/color]] = [color=Red]Color[/color][br]
 [b]Unicode Support[/b][br]
 [utf://#x3A3]] = [utf://#x3A3][br]
 [utf://#0931]] = [utf://#0931][br]
-? =  ?[br][br]
+&#0931&#59; =  &#0931;[br][br]
 [b]Entity names[/b][br]
-¿ = ¿[br]
+&iquest&#59; = &iquest;[br]
+ [hr]
 
 EOM
 
@@ -93,15 +93,16 @@ sub create_bbr {
 }
 
 sub create_au {
-    my $au = AUBBC->new();
-    return $au;
+my $au = AUBBC->new();
+return $au;
 }
 
-my $pb = create_pb();
-my $bp = create_bp();
-my $hb = create_hb();
-my $bbr = create_bbr();
-my $au = create_au();
+my $pb = &create_pb;
+my $bp = &create_bp;
+my $hb = &create_hb;
+my $bbr = &create_bbr;
+my $au = &create_au;
+
 
 my $rendered1 = $pb->render($code);
 #print "PB\n$rendered1\n\n";
@@ -111,7 +112,7 @@ my $rendered2 = $tree->toHTML();
 my $rendered3 = $hb->parse($code);
 #print "HB\n$rendered3\n\n";
 my $rendered4 = $bbr->parse($code);
-print "BBR\n$rendered4\n\n";
+#print "BBR\n$rendered4\n\n";
 my $rendered5 = $au->do_all_ubbc($code);
 #print "AU\n$rendered5\n\n";
 

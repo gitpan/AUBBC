@@ -24,10 +24,11 @@ The advantage of using this BBcode is to restrict the usage of HTML/XHTML
 elements and to make formating of posts easy to people that have no HTML/XHTML skill.
 Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
 
-This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
+The [c] or code tags can highlight Perl code, it highlights the Perl code with CSS in HTML/XHTML,
+and in the examples folder the tag_list.cgi file has a CSS code you could work from. This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
 Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
-The script_escape setting and method also converts the ' sign so the text can be stored in a SQL back-end.
-Most of the free web portals use the | sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
+The script_escape setting and method also converts the &#39; sign so the text can be stored in a SQL back-end.
+Most of the free web portals use the &#124; sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
 
 Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
 
@@ -103,39 +104,14 @@ methods can do in do_all_ubbc. some settings are used in many methods
 
 =head2 $aubbc->settings();
 
-This is a list of Default settings and the method to change them when needed.
+This is the method to change them when needed.
 
      $aubbc->settings(
         aubbc => 1,
         utf => 1,
         smileys => 1,
         highlight => 1,
-        no_bypass => 0,
-        for_links => 0,
-        aubbc_escape => 1,
-        icon_image => 1,
-        image_hight => 60,
-        image_width => 90,
-        image_border => 0,
-        image_wrap => 1,
-        href_target => 0,
-        images_url => '',
-        html_type => 'html',
-        code_class => '',
-        code_extra => '',
-        href_class => '',
-        quote_class => '',
-        quote_extra => '',
-        script_escape => 1,
-        protect_email => 1,
-        email_message => '&#67;&#111;&#110;&#116;&#97;&#99;&#116;&#32;&#69;&#109;&#97;&#105;&#108;',
-        highlight_class1 => '',
-        highlight_class2 => '',
-        highlight_class3 => '',
-        highlight_class4 => '',
-        highlight_class5 => '',
-        highlight_class6 => '',
-        highlight_class7 => '',
+        # est.....
       );
 
 =head2 aubbc
@@ -395,7 +371,7 @@ Note: There are no Built-in smilies.
 
 =head2 $aubbc->smiley_hash();
 
-This is one of the two ways to import your custom smilies hash.
+This is how you import your custom smilies hash.
 
 example:
 
@@ -409,23 +385,6 @@ The way you use this smiley is [lol]
 Must have the images_url set to the proper location.
 
 images_url/smilies/lol.gif
-
-=head2 %AUBBC::SMILEYS
-
-This is one of the two ways to import your custom smiley hash.
-
-example:
-
-  my %smiley = (lol => 'lol.gif');
-  use AUBBC;
-  %AUBBC::SMILEYS = %smiley;
-  my $aubbc = new AUBBC;
-
-The way you use this smiley is [lol]
-
-Must have the images_url set to the proper location.
-
-images_url/smileis/lol.gif
 
 =head1 Build your own tags
 
@@ -565,6 +524,10 @@ Returns the current version of the module.
   print $Current_Version;
 
 =head1 History
+
+v3.00 - 09/14/2010
+
+Improvement - made it balls to the wall faster.
 
 v2.21 - 09/09/2010 16:32:34
 

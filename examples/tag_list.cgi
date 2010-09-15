@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use lib '../';
+#use lib '../';
 use AUBBC;
 my $aubbc = new AUBBC;
 
@@ -53,61 +53,54 @@ sub print_list {
 my $message = <<HTML;
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
+[[strong]Strong[[/strong] = [strong]Strong[/strong][br]
+[[small]Small[[/small] = [small]Small[/small][br]
+[[big]Big[[/big] = [big]Big[/big][br]
+[[h1]Head 1[[/h1] = [h1]Head 1[/h1][br]
+through.....[br]
+[[h6]Head 6[[/h6] = [h6]Head 6[/h6][br]
 [[i]Italic[[/i] = [i]Italic[/i][br]
 [[u]Underline[[/u] = [u]Underline[/u][br]
 [[strike]Strike[[/strike] = [strike]Strike[/strike][br]
 [left]]Left Align[[/left] = [left]Left Align[/left][br]
 [[center]Center Align[[/center] = [center]Center Align[/center][br]
 [right]]Right Align[[/right] = [right]Right Align[/right][br]
-[sup]]Sup[[/sup] = [sup]Sup[/sup][br]
-[sub]]Sub[[/sub] = [sub]Sub[/sub][br]
+[sup]Sup[/sup][br]
+[sub]Sub[/sub][br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
 [img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
 [img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
-[right_img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
-[right_img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
-[left_img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
-[left_img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br][br]
-[url]]URL[[/url] = [url]http://google.com[/url][br]
-[url=URL]]Name[[/url] = [url=http://google.com]Google[/url][br]
+[url=URL]]Name[[/url] = [url=http://www.google.com]http://www.google.com[/url][br]
 http[utf://#58]//google.com = http://google.com[br]
-www&#46;cpan.org = www.cpan.org[br]
-[email]]Email[/email] = [email]some\@email.com[/email] Recommended Not to Post your email in a public area[br]
+[email]]Email[/email] = [email]some@email.com[/email] Recommended Not to Post your email in a public area[br]
 [code]]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[[/code] =
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[[/code] =
 [code]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/code][br]
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[/code][br]
 [c]]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/c]] =
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[/c]] =
 [c]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/c][br]
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[/c][br]
 [[c=My Code]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/c]] =
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[/c]] =
 [c=My Code]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/c][br]
-[[code=My Code]]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[[/code]] =
-[code=My Code]# Some Code ......
-my \%hash = ( stuff => { '1' => 1, '2' => 2 }, );
-print \$hash{stuff}{'1'};[/code][br]
+my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
+print $hash{stuff}{'1'};[/c][br][br]
 [quote]]Quote[/quote]] = [quote]Quote[/quote][br]
 [quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
-[ul]]My List[li]].....[/li]][li]].....[/li]][li]].....[/li]][/ul]] = [ul]My List[li].....[/li][li].....[/li][li].....[/li][/ul][br]
-[ol]]My Numbered List[li=1]].....[/li]][li]].....[/li]][li]].....[/li]][/ol]] = [ol]My Numbered List[li=1].....[/li][li].....[/li][li].....[/li][/ol][br]
-[color=Red]]Color[/color]] = [color=Red]Color[/color][br][br]
+[color=Red]]Color[/color]] = [color=Red]Color[/color][br]
 [b]Unicode Support[/b][br]
 [utf://#x3A3]] = [utf://#x3A3][br]
 [utf://#0931]] = [utf://#0931][br]
 &#0931&#59; =  &#0931;[br][br]
 [b]Entity names[/b][br]
 &iquest&#59; = &iquest;[br]
+ [hr]
 [b]Built Tags[/b][br]
 [[google://Google] [google://Google] Search[br]
 [[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia[br]

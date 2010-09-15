@@ -7,7 +7,7 @@
 # (It may become useful if the test is moved to ./t subdirectory.)
 
 my ($message, $setting, $aubbc, $Current_version, %msg) =
-        ('[br][utf://x23]', '', '', '', (1 => "Test ok ", 2 => "Test error ", ) );
+        ('[br][utf://#x23]', '', '', '', (1 => "Test ok ", 2 => "Test error ", ) );
 
 BEGIN {
         $| = 1;
@@ -23,7 +23,7 @@ END {
                 
         # did we get the version?
         #$Current_version = 5; # reinforce failure
-        $Current_version eq '2.21'
+        $Current_version eq '3.00'
                 ? print $msg{1} . "4\n"
                 : print $msg{2} . "4\n";
 }
