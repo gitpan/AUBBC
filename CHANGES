@@ -1,5 +1,35 @@
 Improvement history for AUBBC
 
+v3.13 - 09/30/2010
+
+Addition - do_ubbc New built-in tag [list][*=1]... [*]... [/list], This will
+follow XHTML or HTML Transitional element style and XHTML or HTML Strict will not
+support the elements that tag [*=1] in the [list] will produce
+(use the other enumerated List Block tags for XHTML or HTML Strict).
+
+Addition - do_ubbc New built-in tag [em]Hello[/em]
+
+Addition - New value for setting line_break 2 for old <br style. This effects script_escape.
+
+Addition - This module now uses Memoize for a massive speed improvement.
+If you thought it was fast before, I hope your sitting down when you bench this version. LOL
+
+Addition - added setting highlight_function to replace the highlighting method
+of AUBBC with a costume one.
+
+Fixed - in do_ubbc the line breaks was invalidating HTML for List Block elements
+
+Improvement - in do_all_ubbc changed defining $msg each time. there could have
+been a bug in past versions if an undefined variable was used after a defined message was
+converted. was going to allow do_all_ubbc to pass the last message but decided
+other people may see that as a bug.
+
+Improvement - in do_all_ubbc moved if $do_flag[4] for no_bypass to a better spot
+
+Improvement - in do_all_ubbc moved if for for_links to a better spot
+
+Improvement - changed tags left,right and center to only convert balanced tags
+
 v3.00 - 09/14/2010
 
 Improvement - made it balls to the wall faster.

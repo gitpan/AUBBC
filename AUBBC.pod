@@ -6,7 +6,7 @@ AUBBC
 =head1 SYNOPSIS
 
   use AUBBC;
-  my $aubbc = new AUBBC;
+  my $aubbc = AUBBC->new();
 
   my $message = 'Lets [b]Bold in HTML[/b]';
 
@@ -20,12 +20,13 @@ Advanced Universal Bulletin Board Code a Perl BBcode API
 
 =head1 Abstract
 
-The advantage of using this BBcode is to restrict the usage of HTML/XHTML
-elements and to make formating of posts easy to people that have no HTML/XHTML skill.
+The advantage of using this BBcode is to have the piece of mind of using a secure program,
+to restrict the usage of HTML/XHTML elements and to make formatting of posts easy to people that have no HTML/XHTML skill.
 Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
 
-The [c] or code tags can highlight Perl code, it highlights the Perl code with CSS in HTML/XHTML,
-and in the examples folder the tag_list.cgi file has a CSS code you could work from. This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
+The [c] or code tags can highlight Perl code, highlighting the Perl code with CSS in HTML/XHTML,
+and in the examples folder the tag_list.cgi file has a CSS code you could work from and now a setting to change to a costume highlighter function.
+This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
 Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
 The script_escape setting and method also converts the &#39; sign so the text can be stored in a SQL back-end.
 Most of the free web portals use the &#124; sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
@@ -130,13 +131,21 @@ Enable or Disable Smiley Tags Default 1 is Enabled, 0 is Disable.
 
 Enable or Disable Code Highlight Default 1 is Enabled, 0 is Disable.
 
+=head2 highlight_function
+
+This can replace the highlighter of AUBBC with a custome one
+
+must provide the text name of the pre-defined subroutine that receives the code
+tags text and returns the highlighted text.
+
 =head2 no_bypass
 
 Enable or Disable User Tags for bypassing hole tag Default 0 is Disable, 1 is Enabled.
 Tags must at the very beginning of the message!!!!
 Must also be in the order of the "Bypass Tag list:" but not on a new line \n
 
-  Bypass Tag list:
+Bypass Tag list:
+
   #none
   #noaubbc
   #nobuild
@@ -155,7 +164,7 @@ Must also be in the order of the "Bypass Tag list:" but not on a new line \n
 
 Enable or Disable AUBBC Tag Escape Default 1 is Enabled, 0 is Disable.
 
- Escaping a Tag:
+Escaping a Tag:
   [b]Stuff[/b] # Normal Tag Bold
   [b]]Stuff[/b]] # Escaped Tag Bold
   [[b]Stuff[[/b] # Escaped Tag Bold
@@ -175,23 +184,23 @@ an image link.
 
 =head2 icon_image
 
- Enable or Disable Custom Image Size Default 1 is Enabled, 0 is Disable.
+Enable or Disable Custom Image Size Default 1 is Enabled, 0 is Disable.
 
- If enabled will use the values from image_hight and image_width
+If enabled will use the values from image_hight and image_width
 
- in all Image Tags [img]/images/large_pic.gif[/img]
+in all Image Tags [img]/images/large_pic.gif[/img]
 
 =head2 image_hight
 
- The Default Image height is 60px.
+The Default Image height is 60px.
 
- Only used when icon_image is Enabled.
+Only used when icon_image is Enabled.
 
 =head2 image_width
 
- The Default Image width is 90px.
+The Default Image width is 90px.
 
- Only used when icon_image is Enabled.
+Only used when icon_image is Enabled.
 
 =head2 image_border
 
@@ -199,9 +208,9 @@ Enable or Disable Image Border Default 0 is Disable, 1 is Enabled.
 
 =head2 image_wrap
 
- Enable or Disable Image wrap Default 1 is Enabled, 0 is Disable.
+Enable or Disable Image wrap Default 1 is Enabled, 0 is Disable.
 
- Enabled will add a space after each image & smiley's.
+Enabled will add a space after each image & smiley's.
 
 =head2 href_target
 
@@ -211,17 +220,17 @@ Enable or Disable Image Border Default 0 is Disable, 1 is Enabled.
 
 =head2 images_url
 
- Default is blank.
+Default is blank.
 
- This is the link to your images folder and is only used for Smilies.
+This is the link to your images folder and is only used for Smilies.
 
  For the smileis to work you must provide a URL.
 
- example:
+example:
 
  smilies must be in /smilies folder
 
- the images_url link must have the /smilies folder in it and not point directly to /smilies.
+the images_url link must have the /smilies folder in it and not point directly to /smilies.
 
 =head2 html_type
 
@@ -235,18 +244,19 @@ so the w3c xhtml validation checks ok.
 
 =head2 line_break
 
-Enable or Disable line_break Default 1 is Enabled, 0 is Disable.
+Enable line_break "<br>\n" Default 1 , 2 is for the "<br>" older style
+that has no new line, 0 is Disable.
 
-This will turn any new line \n to the HTML line break <br> by the script_escape method and the other way around
+This will turn any new line \n to the HTML line break <br>\n or <br> by the script_escape method and the other way around
 with the html_to_text method.
 
 =head2 code_class
 
- Default is '' and this allows a custom class, style and/or JavaScript to be used in any of the [code] [c] tags.
+Default is '' and this allows a custom class, style and/or JavaScript to be used in any of the [code] [c] tags.
 
- must have a space before the text.
+must have a space before the text.
 
- example:
+example:
 
  code_class => ' class="quote"',
 
@@ -256,7 +266,7 @@ with the html_to_text method.
 
 Default is '' and this is for a custom message, code, image, est.. to be used after the [code] [c] tags.
 
- example:
+example:
 
  code_extra => 'Codes may not reflect what is in the current version.',
 
@@ -266,9 +276,9 @@ Default is '' and this is for a custom message, code, image, est.. to be used af
 
 Default is '' and this allows a custom class, style and/or JavaScript to be used in the [url] tags.
 
- must have a space before the text.
+must have a space before the text.
 
- example:
+example:
 
  href_class => ' class="url"',
  href_class => ' class="url" onclick="....."',
@@ -277,9 +287,9 @@ Default is '' and this allows a custom class, style and/or JavaScript to be used
 
 Default is '' and this allows a custom class, style and/or JavaScript to be used in the [quote] tags.
 
- must have a space before the text.
+must have a space before the text.
 
- example:
+example:
 
   quote_class => ' class="quote"',
   quote_class => ' class="quote" onclick="....."',
@@ -310,12 +320,12 @@ can result is a security compromise of the AUBBC tags.
 
 =head2 protect_email
 
-  Default is 1 and other possible values are (0, 2, 3, 4).
+Default is 1 and other possible values are (0, 2, 3, 4).
 
-  Can add a protection to hide emails in the [email] tag from email harvesters.
+Can add a protection to hide emails in the [email] tag from email harvesters.
 
 
-  Not 100% fool proof.
+Not 100% fool proof.
 
         0 - has no type of protection.
 
@@ -376,7 +386,7 @@ This is how you import your custom smilies hash.
 example:
 
   use AUBBC;
-  my $aubbc = new AUBBC;
+  my $aubbc = AUBBC->new();
   my %smiley = (lol => 'lol.gif');
   $aubbc->smiley_hash(%smiley);
 
@@ -420,7 +430,7 @@ Usage:
   package My_Message;
 
   use AUBBC;
-  my $aubbc = new AUBBC;
+  my $aubbc = AUBBC->new();
 
   $aubbc->add_build_tag(
         name     => 'ok',
@@ -487,7 +497,7 @@ There are two ways to use this.
 
 Default message is 'Error', this message is used when the code finds bad characters in [email] or [img] tags.
 
- Usage of this setting:
+Usage of this setting:
 
   use AUBBC;
   $AUBBC::BAD_MESSAGE = 'Unauthorized use of characters or pattern in this tag.';
@@ -499,9 +509,9 @@ The Debug setting will send a lot of messages to warn and is not recommended to 
 
 =head2 $AUBBC::DEBUG_AUBBC
 
- Default is '' off, and Enabled is 1.
+Default is '' off, and Enabled is 1.
 
- Usage of this setting:
+Usage of this setting:
 
   use AUBBC;
   $AUBBC::DEBUG_AUBBC = 1;
@@ -517,13 +527,55 @@ Returns the current version of the module.
  Usage:
 
   use AUBBC;
-  my $aubbc = new AUBBC;
+  my $aubbc = AUBBC->new();
 
   my $Current_Version = $aubbc->version();
 
   print $Current_Version;
 
+
+=head1 Bugs and Reports
+
+This bbcode takes a "garbage in garbage out" approach in coveting most
+of its built-in BBcode tags. This does not mean that the tags will brake or
+invalidate HTML/XHTML. What it means is users can use tags in ways that can invalidate
+HTML/XHTML and if the user knows HTML/XHTML they can also use the correct
+tags to produce valid HTML/XHTML. None of the tags should brake the theme
+since there is no <div> or table tags.
+
+Please report anything you think is a bug to bug-AUBBC@rt.cpan.org or shakaflex@gmail.com
+
 =head1 History
+
+v3.13 - 09/30/2010
+
+Addition - do_ubbc New built-in tag [list][*=1]... [*]... [/list], This will
+follow XHTML or HTML Transitional element style and XHTML or HTML Strict will not
+support the elements that tag [*=1] in the [list] will produce
+(use the other enumerated List Block tags for XHTML or HTML Strict).
+
+Addition - do_ubbc New built-in tag [em]Hello[/em]
+
+Addition - New value for setting line_break 2 for old <br style. This effects script_escape.
+
+Addition - This module now uses Memoize for a massive speed improvement.
+If you thought it was fast before, I hope your sitting down when you bench this version. LOL
+
+Addition - added setting highlight_function to replace the highlighting method
+of AUBBC with a costume one.
+
+Fixed - in do_ubbc the line breaks was invalidating HTML for List Block elements
+
+Improvement - in do_all_ubbc changed defining $msg each time. there could have
+been a bug in past versions if an undefined variable was used after a defined message was
+converted. was going to allow do_all_ubbc to pass the last message but decided
+other people may see that as a bug.
+
+Improvement - in do_all_ubbc moved if $do_flag[4] for no_bypass to a better spot
+
+Improvement - in do_all_ubbc moved if for for_links to a better spot
+
+Improvement - changed tags left,right and center to only convert balanced tags
 
 v3.00 - 09/14/2010
 
@@ -666,7 +718,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v2.21 - 09/09/2010 By: N.K.A.
+AUBBC.pm, v3.13 - 09/30/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 

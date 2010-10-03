@@ -4,7 +4,7 @@ use strict;
 use warnings;
 #use lib '../';
 use AUBBC;
-my $aubbc = new AUBBC;
+my $aubbc = AUBBC->new();
 
 # Change some default settings
 $aubbc->settings(
@@ -65,8 +65,9 @@ through.....[br]
 [left]]Left Align[[/left] = [left]Left Align[/left][br]
 [[center]Center Align[[/center] = [center]Center Align[/center][br]
 [right]]Right Align[[/right] = [right]Right Align[/right][br]
-[sup]Sup[/sup][br]
-[sub]Sub[/sub][br]
+[[em]Em[/em]] = [em]Em[/em][br]
+[[sup]Sup[/sup]] = [sup]Sup[/sup][br]
+[[sub]Sub[/sub]] = [sub]Sub[/sub][br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
 [img]]http://www.google.com/intl/en/images/about_logo.gif[[/img] =
 [img]http://www.google.com/intl/en/images/about_logo.gif[/img][br][br]
@@ -93,6 +94,23 @@ my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
 print $hash{stuff}{'1'};[/c][br][br]
 [quote]]Quote[/quote]] = [quote]Quote[/quote][br]
 [quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
+[ul]][li]].....[/li]][li]].....[/li]][li]].....[/li]][/ul]] =
+[ul]
+[li]a.....[/li]
+[li]b.....[/li]
+[li]c.....[/li]
+[/ul]
+[ol]][li=1]].....[/li]][li]].....[/li]][li]].....[/li]][/ol]] =
+[ol]
+[li=1].....[/li]
+[li].....[/li]
+[li].....[/li]
+[/ol]
+[[list][[*=1].....[[*]....[[/list] =
+[list]
+[*=1].....
+[*]....
+[/list][br]
 [color=Red]]Color[/color]] = [color=Red]Color[/color][br]
 [b]Unicode Support[/b][br]
 [utf://#x3A3]] = [utf://#x3A3][br]
@@ -100,7 +118,7 @@ print $hash{stuff}{'1'};[/c][br][br]
 &#0931&#59; =  &#0931;[br][br]
 [b]Entity names[/b][br]
 &iquest&#59; = &iquest;[br]
- [hr]
+ [hr]] = [hr]
 [b]Built Tags[/b][br]
 [[google://Google] [google://Google] Search[br]
 [[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia[br]
@@ -200,30 +218,31 @@ sub js_print {
 }
 
 sub other_sites {
-  my ($tag_name, $text_from_AUBBC) = @_;
+ my ($tag_name, $text_from_AUBBC) = @_;
 
-  # cpan modules
-  $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&amp;query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
+# cpan modules
+ $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&amp;query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
 
-  # wikipedia Wiki
-  $text_from_AUBBC = "<a href=\"http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');
+# wikipedia Wiki
+ $text_from_AUBBC = "<a href=\"http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');
 
-  # wikibooks Wiki Books
-  $text_from_AUBBC = "<a href=\"http://wikibooks.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikibooks' || $tag_name eq 'wb');
+# wikibooks Wiki Books
+ $text_from_AUBBC = "<a href=\"http://wikibooks.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikibooks' || $tag_name eq 'wb');
 
-  # wikiquote Wiki Quote
-  $text_from_AUBBC = "<a href=\"http://wikiquote.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikiquote' || $tag_name eq 'wq');
+# wikiquote Wiki Quote
+ $text_from_AUBBC = "<a href=\"http://wikiquote.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikiquote' || $tag_name eq 'wq');
 
-  # wikisource Wiki Source
-  $text_from_AUBBC = "<a href=\"http://wikisource.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikisource' || $tag_name eq 'ws');
+# wikisource Wiki Source
+ $text_from_AUBBC = "<a href=\"http://wikisource.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikisource' || $tag_name eq 'ws');
 
-  # google search
-  $text_from_AUBBC = "<a href=\"http://www.google.com/search?q=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'google';
+# google search
+ $text_from_AUBBC = "<a href=\"http://www.google.com/search?q=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'google';
 
-  # localtime()
-  if ($tag_name eq 'time') {
-        my $time = scalar(localtime);
-        $text_from_AUBBC = "<b>[$time]</b>";
-        }
-        return $text_from_AUBBC;
+# localtime()
+ if ($tag_name eq 'time') {
+  my $time = scalar(localtime);
+  $text_from_AUBBC = "<b>[$time]</b>";
+ }
+ 
+ return $text_from_AUBBC;
 }

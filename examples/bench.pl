@@ -5,18 +5,10 @@ use Carp qw(carp croak);
 use Data::Dumper;
 use Benchmark;
 
-my %loaded;
-for (qw/ AUBBC BBCode::Parser Parse::BBCode HTML::BBCode HTML::BBReverse /) {
-    eval "use $_";
-    unless ($@) {
-      $loaded{$_} = $_->VERSION;
-    }
-}
-print "Benchmarking...\n";
-for my $key (keys %loaded) {
-    print "$key\t$loaded{$key}\n";
-}
+# this bench is more accuret in showing the
+# time it takes for the modules to load.
 
+my %loaded;
 my $code = <<'EOM';
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
@@ -32,6 +24,7 @@ through.....[br]
 [left]]Left Align[[/left] = [left]Left Align[/left][br]
 [[center]Center Align[[/center] = [center]Center Align[/center][br]
 [right]]Right Align[[/right] = [right]Right Align[/right][br]
+[[em]Emotion[/em]] = [em]Emotion[/em]
 [sup]Sup[/sup][br]
 [sub]Sub[/sub][br]
 [pre]]Pre[[/pre] = [pre]Pre[/pre][br]
@@ -68,31 +61,46 @@ print $hash{stuff}{'1'};[/c][br][br]
 [b]Entity names[/b][br]
 &iquest&#59; = &iquest;[br]
  [hr]
+[list]
+[*=1]stuff
+[*]stuff2
+[*]stuff3
+[/list]
 
 EOM
 
 
 sub create_pb {
+use Parse::BBCode;
+$loaded{'Parse::BBCode'} = Parse::BBCode->VERSION;
     my $pb = Parse::BBCode->new();
     return $pb;
 }
 
 sub create_hb {
+use HTML::BBCode;
+$loaded{'HTML::BBCode'} = HTML::BBCode->VERSION;
     my $bbc  = HTML::BBCode->new();
     return $bbc;
 }
 
 sub create_bp {
+use BBCode::Parser;
+$loaded{'BBCode::Parser'} = BBCode::Parser->VERSION;
     my $parser = BBCode::Parser->new(follow_links => 1);
     return $parser;
 }
 
 sub create_bbr {
-    my $bbr = HTML::BBReverse->new();
-    return $bbr;
+use HTML::BBReverse;
+$loaded{'HTML::BBReverse'} = HTML::BBReverse->VERSION;
+my $bbr = HTML::BBReverse->new();
+return $bbr;
 }
 
 sub create_au {
+use AUBBC;
+$loaded{AUBBC} = AUBBC->VERSION;
 my $au = AUBBC->new();
 return $au;
 }
@@ -104,17 +112,24 @@ my $bbr = &create_bbr;
 my $au = &create_au;
 
 
-my $rendered1 = $pb->render($code);
-#print "PB\n$rendered1\n\n";
-my $tree = $bp->parse($code);
-my $rendered2 = $tree->toHTML();
-#print "BP\n$rendered2\n\n";
-my $rendered3 = $hb->parse($code);
-#print "HB\n$rendered3\n\n";
-my $rendered4 = $bbr->parse($code);
-#print "BBR\n$rendered4\n\n";
-my $rendered5 = $au->do_all_ubbc($code);
-#print "AU\n$rendered5\n\n";
+# un-commit below to see each modules output
+
+#my $rendered1 = $pb->render($code);
+#print "Parse::BBCode\t$loaded{'Parse::BBCode'}\n$rendered1\n\n";
+
+#my $tree = $bp->parse($code);
+#my $rendered2 = $tree->toHTML();
+#print "BP\t$loaded{'BBCode::Parser'}\n$rendered2\n\n";
+
+#my $rendered3 = $hb->parse($code);
+#print "HB\t$loaded{'HTML::BBCode'}\n$rendered3\n\n";
+
+#my $rendered4 = $bbr->parse($code);
+#print "BBR\t$loaded{'HTML::BBReverse'}\n$rendered4\n\n";
+
+#my $rendered5 = $au->do_all_ubbc($code);
+#print "AUBBC\t$loaded{AUBBC}\n$rendered5\n\n";
+
 
 timethese($ARGV[0] || -1, {
     $loaded{'Parse::BBCode'} ?  (
