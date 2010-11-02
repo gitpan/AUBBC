@@ -1,5 +1,25 @@
 Improvement history for AUBBC
 
+v4.00 - 11/02/2010
+
+Addition - New feature to the code tags aubbc_setting code_download.
+the default setting for code_download is '^Download above code^' this message will
+be the links name. the link will open a JavaScript pop-up window and write the
+code in it to be copied or printed to a printer. A new JavaScript function was
+added to the js_print method called MyCodePrint. JavaScript makes this feature
+portable and dynamic. the link for code_download is added after the code_extra
+setting so a disclaimer can be added before the code_download link
+
+Addition - $AUBBC::MEMOIZE This setting can turn AUBBC's usage of Memoize on or off.
+Default setting 1 will check if it needs to load Memoize, if loaded then load the sub's that need the speed.
+Setting 0 will not use Memoize.
+
+Addition - AUBBC::make_link($link,$name,$javascript,$target) this is useful enough
+to mention once.
+
+Improvement - After lots of testing I have removed all /o in the regex. One main
+reason is Memoize provides enough speed.
+
 v3.13 - 09/30/2010
 
 Addition - do_ubbc New built-in tag [list][*=1]... [*]... [/list], This will

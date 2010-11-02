@@ -10,9 +10,7 @@ AUBBC
 
   my $message = 'Lets [b]Bold in HTML[/b]';
 
-  $message = $aubbc->do_all_ubbc($message);
-
-  print $message;
+  print $aubbc->do_all_ubbc($message);
 
 =head1 Description
 
@@ -272,6 +270,21 @@ example:
 
  code_extra => '<div style="clear: left"> </div>',
 
+=head2 code_download
+
+Default is '^Download above code^' this message will
+be the links name. the link will open a JavaScript popup window and write the
+code in it to be copyed or printed. A new JavaScript function was
+added to the js_print method called MyCodePrint.
+
+To turn off set this to ''
+
+example:
+
+ code_download => 'Click here to get above code.',
+
+ code_download => '',
+
 =head2 href_class
 
 Default is '' and this allows a custom class, style and/or JavaScript to be used in the [url] tags.
@@ -503,6 +516,29 @@ Usage of this setting:
   $AUBBC::BAD_MESSAGE = 'Unauthorized use of characters or pattern in this tag.';
   # est...
 
+=head1 Memoize
+
+This setting can turn AUBBC's usage of Memoize on or off.
+
+=head2 $AUBBC::MEMOIZE
+
+Default setting 1 will check if it needs to load Memoize, if loaded then load the sub's that need the speed.
+
+Setting 0 will not use Memoize.
+
+Usage of this setting:
+
+  use Memoize;
+  # do other stuff...
+
+  use AUBBC;
+
+  # AUBBC will detect that Memoize was loaded
+  # and just load the sub's that need the speed.
+  my $aubbc = AUBBC->new();
+
+  # est...
+
 =head1 Debug
 
 The Debug setting will send a lot of messages to warn and is not recommended to leave on all the time.
@@ -543,9 +579,29 @@ HTML/XHTML and if the user knows HTML/XHTML they can also use the correct
 tags to produce valid HTML/XHTML. None of the tags should brake the theme
 since there is no <div> or table tags.
 
-Please report anything you think is a bug to bug-AUBBC@rt.cpan.org or shakaflex@gmail.com
+Please report anything you think is a bug to bug-AUBBC [at] rt.cpan.org or shakaflex [at] gmail.com
 
 =head1 History
+
+v4.00 - 11/02/2010
+
+Addition - New feature to the code tags aubbc_setting code_download.
+the default setting for code_download is '^Download above code^' this message will
+be the links name. the link will open a JavaScript pop-up window and write the
+code in it to be copied or printed to a printer. A new JavaScript function was
+added to the js_print method called MyCodePrint. JavaScript makes this feature
+portable and dynamic. the link for code_download is added after the code_extra
+setting so a disclaimer can be added before the code_download link
+
+Addition - $AUBBC::MEMOIZE This setting can turn AUBBC's usage of Memoize on or off.
+Default setting 1 will check if it needs to load Memoize, if loaded then load the sub's that need the speed.
+Setting 0 will not use Memoize.
+
+Addition - AUBBC::make_link($link,$name,$javascript,$target) this is useful enough
+to mention once.
+
+Improvement - After lots of testing I have removed all /o in the regex. One main
+reason is Memoize provides enough speed.
 
 v3.13 - 09/30/2010
 
@@ -718,11 +774,11 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v3.13 - 09/30/2010 By: N.K.A.
+AUBBC.pm, v4.00 - 11/02/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
-shakaflex@gmail.com
+shakaflex [at] gmail.com
 http://search.cpan.org/~sflex/
 
 Note: This code has a lot of settings and works good

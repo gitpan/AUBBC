@@ -23,7 +23,7 @@ END {
                 
         # did we get the version?
         #$Current_version = 5; # reinforce failure
-        $Current_version eq '3.13'
+        $Current_version eq '4.00'
                 ? print $msg{1} . "4\n"
                 : print $msg{2} . "4\n";
 }

@@ -24,9 +24,7 @@ $aubbc->settings(
         );
 
 # Add some tags to Build tags
-  my @other_sites =
-        ('cpan','google','wikisource','ws','wikiquote','wq','wikibooks','wb','wikipedia','wp');
-  foreach my $tag (@other_sites) {
+  foreach my $tag (('cpan','google','wikisource','ws','wikiquote','wq','wikibooks','wb','wikipedia','wp')) {
   $aubbc->add_build_tag(
         name     => $tag,
         pattern  => 'all',
@@ -50,7 +48,7 @@ $aubbc->settings(
 
 sub print_list {
 # The list
-my $message = <<HTML;
+my $message = <<'HTML';
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
 [[strong]Strong[[/strong] = [strong]Strong[/strong][br]
@@ -221,22 +219,28 @@ sub other_sites {
  my ($tag_name, $text_from_AUBBC) = @_;
 
 # cpan modules
- $text_from_AUBBC = "<a href=\"http://search.cpan.org/search?mode=module&amp;query=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'cpan';
+ $text_from_AUBBC = AUBBC::make_link("http://search.cpan.org/search?mode=module&amp;query=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if $tag_name eq 'cpan';
 
 # wikipedia Wiki
- $text_from_AUBBC = "<a href=\"http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');
+ $text_from_AUBBC = AUBBC::make_link("http://wikipedia.org/wiki/Special:Search?search=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if ($tag_name eq 'wikipedia' || $tag_name eq 'wp');
 
 # wikibooks Wiki Books
- $text_from_AUBBC = "<a href=\"http://wikibooks.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikibooks' || $tag_name eq 'wb');
+ $text_from_AUBBC = AUBBC::make_link("http://wikibooks.org/wiki/Special:Search?search=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if ($tag_name eq 'wikibooks' || $tag_name eq 'wb');
 
 # wikiquote Wiki Quote
- $text_from_AUBBC = "<a href=\"http://wikiquote.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikiquote' || $tag_name eq 'wq');
+ $text_from_AUBBC = AUBBC::make_link("http://wikiquote.org/wiki/Special:Search?search=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if ($tag_name eq 'wikiquote' || $tag_name eq 'wq');
 
 # wikisource Wiki Source
- $text_from_AUBBC = "<a href=\"http://wikisource.org/wiki/Special:Search?search=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if ($tag_name eq 'wikisource' || $tag_name eq 'ws');
+ $text_from_AUBBC = AUBBC::make_link("http://wikisource.org/wiki/Special:Search?search=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if ($tag_name eq 'wikisource' || $tag_name eq 'ws');
 
 # google search
- $text_from_AUBBC = "<a href=\"http://www.google.com/search?q=$text_from_AUBBC\" target=\"_blank\">$text_from_AUBBC</a>" if $tag_name eq 'google';
+ $text_from_AUBBC = AUBBC::make_link("http://www.google.com/search?q=$text_from_AUBBC",$text_from_AUBBC,'',1)
+  if $tag_name eq 'google';
 
 # localtime()
  if ($tag_name eq 'time') {

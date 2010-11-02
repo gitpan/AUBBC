@@ -9,6 +9,13 @@ use Benchmark;
 # time it takes for the modules to load.
 
 my %loaded;
+#my $code = <<'EOM';
+#[b]bold [i]italic[/i] test[/b]
+#[code]some [perl] code[/code]
+#[url=http://foo.example.org/]a link![/url]
+
+#EOM
+
 my $code = <<'EOM';
 [br][b]The Very common UBBC Tags[/b][br]
 [[b]Bold[[/b] = [b]Bold[/b][br]
@@ -100,7 +107,9 @@ return $bbr;
 
 sub create_au {
 use AUBBC;
+#use Memoize;
 $loaded{AUBBC} = AUBBC->VERSION;
+#$AUBBC::MEMOIZE = 0;
 my $au = AUBBC->new();
 return $au;
 }
