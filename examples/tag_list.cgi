@@ -21,6 +21,8 @@ $aubbc->settings(
         highlight_class5 => ' class="highlightclass5"',
         highlight_class6 => ' class="highlightclass6"',
         highlight_class7 => ' class="highlightclass7"',
+        highlight_class8 => ' class="highlightclass5"',
+        highlight_class9 => ' class="highlightclass5"',
         );
 
 # Add some tags to Build tags
@@ -43,7 +45,7 @@ $aubbc->settings(
 # This is so eather the print_list sub will run or the js_print
 # if this file was ran on a web server
         $ENV{'QUERY_STRING'}
-                ? js_print->()
+                ? $aubbc->js_print()
                 : print_list->();
 
 sub print_list {
@@ -90,8 +92,10 @@ print $hash{stuff}{'1'};[/c]] =
 [c=My Code]# Some Code ......
 my %hash = ( stuff => { '1' => 1, '2' => 2 }, );
 print $hash{stuff}{'1'};[/c][br][br]
-[quote]]Quote[/quote]] = [quote]Quote[/quote][br]
-[quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
+[quote]]Quote[/quote]] =[br]
+[quote]Quote[/quote][br]
+[quote=Flex]]Quote[/quote]] =[br]
+[quote=Flex]Quote[/quote][br]
 [ul]][li]].....[/li]][li]].....[/li]][li]].....[/li]][/ul]] =
 [ul]
 [li]a.....[/li]
@@ -118,13 +122,13 @@ print $hash{stuff}{'1'};[/c][br][br]
 &iquest&#59; = &iquest;[br]
  [hr]] = [hr]
 [b]Built Tags[/b][br]
-[[google://Google] [google://Google] Search[br]
+[[google://Google] = [google://Google] Search[br]
 [[wp://Wikipedia:About] or  [wikipedia://Wikipedia:About] Wikipedia[br]
 [[wb://Wikibooks:About] or [wikibooks://Wikibooks:About] Wikibooks[br]
 [[wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote[br]
 [[ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource[br]
-[cpan://Cpan] Cpan Module Search[br]
-[time] Time[br]
+[[cpan://Cpan] = [cpan://Cpan] Cpan Module Search[br]
+[[time] = [time][br]
 HTML
 
 $message = $aubbc->do_all_ubbc($message);
@@ -209,10 +213,6 @@ $message
 </html>
 HTML
 exit;
-}
-
-sub js_print {
-  $aubbc->js_print();
 }
 
 sub other_sites {

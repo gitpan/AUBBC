@@ -9,12 +9,6 @@ use Benchmark;
 # time it takes for the modules to load.
 
 my %loaded;
-#my $code = <<'EOM';
-#[b]bold [i]italic[/i] test[/b]
-#[code]some [perl] code[/code]
-#[url=http://foo.example.org/]a link![/url]
-
-#EOM
 
 my $code = <<'EOM';
 [br][b]The Very common UBBC Tags[/b][br]
@@ -119,7 +113,6 @@ my $bp = &create_bp;
 my $hb = &create_hb;
 my $bbr = &create_bbr;
 my $au = &create_au;
-
 
 # un-commit below to see each modules output
 

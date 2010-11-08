@@ -1,5 +1,28 @@
 Improvement history for AUBBC
 
+v4.01 - 11/08/2010
+
+Fixed - Bug that converts the true text typed to the HTML code name.
+All parts of the module where effected by this bug, in the code tag if the
+author ment & #59 ; it would show ; . This also caused a long standing bug with
+typing any HTML code name and saving it to a backend.
+this fix removes the HTML code name regex in do_unicode and had to add/move two
+filters in "script_escape to conver the & to an amp and ; to #59;" and
+"html_to_text to conver amp to & and #59 to ;". This fix also helped in allowing
+the regex's for highlighting subroutines to be made.
+
+Fixed - had to add a null byte marker to escape_aubbc so the code tag's
+highlighter can detect the escaped character and change it back. In do_all_ubbc
+All markers get removed before the message is returned because FireFox can see
+the null bytes as an error.
+
+Addition - Perl subroutine highlighting for the code tag highlighter. Had a
+problem making this till this version because a HTML code name can look like
+&TheName; and a Perl subroutine looked the same till ; got converted.
+
+Addition - AUBBC::make_image($align,$src,$width,$height,$alt) this is useful enough
+to mention once.
+ 
 v4.00 - 11/02/2010
 
 Addition - New feature to the code tags aubbc_setting code_download.
