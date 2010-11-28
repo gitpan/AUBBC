@@ -1,5 +1,16 @@
 Improvement history for AUBBC
 
+v4.02 - 11/28/2010
+
+Fixed - The element ID for the code download started at 1 for every instance this
+will force the browser to take priority to load the first ID it reads. The fix
+starts the counter at 'time.$$.000' to try to produce a more unique ID for each
+instance.
+
+Fixed - under the code tag in do_ubbc line " $do_f[8] = '' if $do_f[8]; "
+should have been $do_f[9] = '' if $do_f[9];
+
+
 v4.01 - 11/08/2010
 
 Fixed - Bug that converts the true text typed to the HTML code name.

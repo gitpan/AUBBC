@@ -2,13 +2,13 @@ package AUBBC;
 use strict;
 use warnings;
 
-our $VERSION     = '4.01';
+our $VERSION     = '4.02';
 our $BAD_MESSAGE = 'Error';
 our $DEBUG_AUBBC = 0;
 our $MEMOIZE     = 1;
 my $msg          = '';
 my $long_regex   = '[\w\.\/\-\~\@\:\;\=]+(?:\?[\w\~\.\;\:\,\$\-\+\!\*\?\/\=\&\@\#\%]+?)?';
-my @do_f         = (1,1,1,1,1,0,0,0,0,'');
+my @do_f         = (1,1,1,1,1,0,0,0,time.$$.'000','');
 my @key64        = ('A'..'Z','a'..'z',0..9,'+','/');
 my %SMILEYS      = ();
 my %Build_AUBBC  = ();
@@ -176,7 +176,7 @@ sub do_ubbc {
  warn 'ENTER do_ubbc' if $DEBUG_AUBBC;
  $msg =~ s/\[(?:c|code)\](?s)(.+?)\[\/(?:c|code)\]/code_tag($1, '')/ge;
  $msg =~ s/\[(?:c|code)=(.+?)\](?s)(.+?)\[\/(?:c|code)\]/code_tag($2, $1)/ge;
- $do_f[8] = '' if $do_f[8];
+ $do_f[9] = '' if $do_f[9];
 
  $msg =~ s/\[(img|right_img|left_img)\](.+?)\[\/img\]/fix_image($1, $2)/ge if ! $AUBBC{no_img};
 
@@ -232,8 +232,9 @@ sub fix_image {
 
   $tmp = ($AUBBC{icon_image})
    ? make_link($tmp,
-make_image($tmp2,$tmp,$AUBBC{image_width},$AUBBC{image_hight},''),
-'',1).$AUBBC{image_wrap}
+      make_image($tmp2,$tmp,$AUBBC{image_width},
+        $AUBBC{image_hight},''),
+        '',1).$AUBBC{image_wrap}
    : make_image($tmp2,$tmp,'','','').$AUBBC{image_wrap};
  }
  return $tmp;
@@ -290,7 +291,7 @@ if (returner) { window.location='mailto:'+returner; }
 function MyCodePrint (input) {
  if (input && document.getElementById(input)) {
   var TheCode = document.getElementById(input).innerHTML;
-  TheCode = TheCode.replace(/<([^br<]+|\/?[pubi])>/ig, "");
+  TheCode = TheCode.replace(/<([^br<]+|\/?[puib])>/ig, "");
   codewin = window.open("", input, "width=800,height=600,resizable=yes,menubar=yes,scrollbars=yes");
   top.codewin.document.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"+
 "<html>\n<head>\n<title>MyCodePrint</title>\n"+
@@ -505,7 +506,7 @@ __END__
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.01 11/08/2010 By: N.K.A.
+AUBBC.pm, v4.02 11/28/2010 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 

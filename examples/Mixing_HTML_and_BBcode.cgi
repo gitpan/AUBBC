@@ -2,12 +2,12 @@
 
 =head1 COPYLEFT
 
- Mixing_HTML_and_BBcode.pm, v0.01 alpha 09/04/2010 By: N.K.A.
+ Mixing_HTML_and_BBcode.pm, v0.02 alpha 11/28/2010 By: N.K.A.
 
  This file is to discribe the usage of:
  AUBBC.pm - Advanced Universal Bulletin Board Code a Perl BBcode API
 
- shakaflex@gmail.com
+ shakaflex [at] gmail.com
  http://search.cpan.org/~sflex/
 
 =head1 Disclaimer
@@ -64,7 +64,7 @@ sub saving_data {
 $message =~ s/(<aubbc>(?s)(.*?)<\/aubbc>)/
         my $ret = $aubbc->script_escape( $2 );
         $ret ? '<aubbc>'.$ret."<\/aubbc>" : $1;
-        /exigo;
+        /exg;
 
 # Then save $message to your database, extra security methods maybe required or desired
 # depending on the type of backend used.......
@@ -78,13 +78,12 @@ sub editing_data {
 
 # Since this gets into sandboxing the script_escape method you may want
 # to play with settings for other view's or can skip the form feilds sandboxing
-# the option 1 for script_escape is needed to not convert &, spaces, tab's, new lines
-# this setting does not effect security
+# the option 1 for script_escape is needed to not convert spaces, tab's, new lines
 
 $form_data =~ s/(<aubbc>(?s)(.*?)<\/aubbc>)/
         my $ret = $aubbc->html_to_text( $2 );
         $ret ? '<aubbc>'.$ret."<\/aubbc>" : $1;
-        /exigo;
+        /exg;
 $form_data = $aubbc->script_escape( $form_data, 1 );
 
 # Now $form_data can be printed in the form feild
@@ -102,7 +101,7 @@ sub editing_data2 {
 $message2 =~ s/(<aubbc>(?s)(.*?)<\/aubbc>)/
         my $ret = $aubbc->script_escape( $2 );
         $ret ? '<aubbc>'.$ret."<\/aubbc>" : $1;
-        /exigo;
+        /exg;
 
 # Then save it to your database, extra security methods maybe required or desired
 # depending on the type of backend used.......
@@ -116,7 +115,7 @@ sub display_data {
 $message3 = $aubbc->do_all_ubbc($message3);
 
 # Before you print we want to remove the <aubbc> home made element
-$message3 =~ s{\<\/?aubbc\>}{}gsio;
+$message3 =~ s{\<\/?aubbc\>}{}g;
 
 # now $message3 is ready to be printed in HTML.
 # Here you would want to print the propper HTML headers and elements with $message3 in it

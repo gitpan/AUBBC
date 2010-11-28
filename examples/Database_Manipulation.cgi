@@ -2,12 +2,12 @@
 
 =head1 COPYLEFT
 
- Database_Manipulation.pm, v0.01 alpha 09/01/2010 By: N.K.A.
+ Database_Manipulation.pm, v0.02 alpha 11/28/2010 By: N.K.A.
 
  This file is to discribe the usage of:
  AUBBC.pm - Advanced Universal Bulletin Board Code a Perl BBcode API
 
- shakaflex@gmail.com
+ shakaflex [at] gmail.com
  http://search.cpan.org/~sflex/
 
 =head1 Disclaimer
@@ -69,7 +69,6 @@ sub editing_data {
 # Since this gets into sandboxing the script_escape method you may want
 # to play with settings for other view's or can skip the form feilds sandboxing
 # the option 1 for script_escape is needed to not convert &, spaces, tab's, new lines
-# this setting does not effect security
 
 $form_data = $aubbc->html_to_text( $form_data );
 $form_data = $aubbc->script_escape( $form_data, 1 );
