@@ -47,7 +47,7 @@ END {
   $count++;
  # did we get the version?
  #$Current_version = 5; # reinforce failure
- $Current_version eq '4.02'
+ $Current_version eq '4.03'
   ? print $msg{1} . "$count\n"
   : print $msg{2} . "$count\n";
 }

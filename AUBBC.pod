@@ -420,11 +420,11 @@ These are the settings and methods for using custom tags.
 
 =head2 $aubbc->add_build_tag(name=>'stuff', pattern=>'stuff' , type=>'stuff', function=>'stuff');
 
-name - will be the tags name
+name - will be the tags name and is limited to a-z 0-9 - _
 
 pattern - limited to 'all' or 'l,n,-,:,_,s'
 
-    'all' = 'a-z\d\:\-\s\_\/\.\;\&\=\?\-\+\#\%\~\,\|'
+    'all' = anything but [ or ]
     'l' = 'a-z'
     'n' = '0-9'
     's' = ' '
@@ -520,7 +520,25 @@ Usage of this setting:
   use AUBBC;
   $AUBBC::BAD_MESSAGE = 'Unauthorized use of characters or pattern in this tag.';
   # est...
-  
+
+=head2 $aubbc->aubbc_error();
+
+There are two errors for add_build_tag that would die if the wrong input was given
+when adding a build tag. The error message will now be stored in this method during
+the instance and any new tag that had an error will not be processed.
+
+Since there is only two errors for add_build_tag you can check this method after
+all new tags have been added. All errors stack in this method and are seperaited
+by a \n newline.
+
+Usage:
+
+        $aubbc->aubbc_error('Insert Your Error'); # Add an error
+
+        print $aubbc->aubbc_error();
+
+        die $aubbc->aubbc_error() if $aubbc->aubbc_error();
+
 =head1 Memoize
 
 This setting can turn AUBBC's usage of Memoize on or off.
@@ -577,16 +595,23 @@ Returns the current version of the module.
 
 =head1 Bugs and Reports
 
-This bbcode takes a "garbage in garbage out" approach in coveting most
-of its built-in BBcode tags. This does not mean that the tags will brake or
-invalidate HTML/XHTML. What it means is users can use tags in ways that can invalidate
-HTML/XHTML and if the user knows HTML/XHTML they can also use the correct
-tags to produce valid HTML/XHTML. None of the tags should brake the theme
-since there is no <div> or table tags.
-
 Please report anything you think is a bug to bug-AUBBC [at] rt.cpan.org or shakaflex [at] gmail.com
 
 =head1 History
+
+v4.03 - 02/03/2011
+
+Addition - New Object method aubbc_error . Developers can now controle if or when
+to handle errors, see the POD 'Error Message' for usage.
+
+Fixed - All built-in tags only convert balanced tags so no unbalanced HTML can
+be produced
+
+Fixed - Bug in code_highlight a highlight regex needed to be changed after
+version 4.01 to support the Parser style.
+
+Improvement - Small restructure of add_build_tag and change the 'all' setting
+of 'pattern' to allow more.
 
 v4.02 - 11/28/2010
 
@@ -812,12 +837,15 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.02 - 11/28/2010 By: N.K.A.
+AUBBC.pm, v4.03 - 02/03/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
 shakaflex [at] gmail.com
+
 http://search.cpan.org/~sflex/
+
+http://code.google.com/p/aubbc/
 
 Note: This code has a lot of settings and works good
 with most default settings see the POD and example files

@@ -1,5 +1,19 @@
 Improvement history for AUBBC
 
+v4.03 - 02/03/2011
+
+Addition - New Object method aubbc_error . Developers can now controle if or when
+to handle errors, see the POD 'Error Message' for usage.
+
+Fixed - All built-in tags only convert balanced tags so no unbalanced HTML can
+be produced
+
+Fixed - Bug in code_highlight a highlight regex needed to be changed after
+version 4.01 to support the Parser style.
+
+Improvement - Small restructure of add_build_tag and change the 'all' setting
+of 'pattern' to allow more.
+
 v4.02 - 11/28/2010
 
 Fixed - The element ID for the code download started at 1 for every instance this
@@ -9,7 +23,6 @@ instance.
 
 Fixed - under the code tag in do_ubbc line " $do_f[8] = '' if $do_f[8]; "
 should have been $do_f[9] = '' if $do_f[9];
-
 
 v4.01 - 11/08/2010
 
@@ -33,7 +46,7 @@ problem making this till this version because a HTML code name can look like
 
 Addition - AUBBC::make_image($align,$src,$width,$height,$alt) this is useful enough
 to mention once.
- 
+
 v4.00 - 11/02/2010
 
 Addition - New feature to the code tags aubbc_setting code_download.
@@ -175,11 +188,11 @@ v1.30 - 09/08/2008 14:12:10
 
 Fixed the function check in add_build_tag(), when the 1.20 changes where made this check was neglected
 
-Edited add_build_tag() Error messages, hopefully they make more sence.
+Edited add_build_tag() Error messages, hopefully they make more sense.
 
 Now add_build_tag() name allows - and _ in it.
 
-v1.20 09/07/2008 09:23:09
+v1.20 - 09/07/2008 09:23:09
 
 Fixed bug that bypassed utf tag converter if square bracket wasn't detected
 
@@ -216,6 +229,7 @@ Commented bad_pattern check for [email] tags, this security check is not needed 
 Added missing $AUBBC{image_border}, $AUBBC{html_type} and $AUBBC{image_wrap} to the none icon image.
 
 Changed names of left and right align images to [left_img]..[/img] and [right_img]..[/img], also updated examples to show tags.
+
 Added missing $AUBBC{html_type} to quote, code tags and code_highlight function.
 
 v1.0 01/20/2008 08:46:08

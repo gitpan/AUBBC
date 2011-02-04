@@ -66,12 +66,11 @@ sub editing_data {
 # the backend and display the data in a HTML form to be edited lets say its
 # in variable $form_data
 
-# Since this gets into sandboxing the script_escape method you may want
+# Since this gets into sandboxing the html_to_text method you may want
 # to play with settings for other view's or can skip the form feilds sandboxing
-# the option 1 for script_escape is needed to not convert &, spaces, tab's, new lines
+# the option 1 for html_to_text is needed to not convert &, spaces, tab's
 
 $form_data = $aubbc->html_to_text( $form_data );
-$form_data = $aubbc->script_escape( $form_data, 1 );
 
 # Now $form_data can be printed in the form feild
 # When the HTML form is submitted we fictitiously sent the edited data to editing_data2

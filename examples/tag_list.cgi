@@ -96,6 +96,7 @@ print $hash{stuff}{'1'};[/c][br][br]
 [quote]Quote[/quote][br]
 [quote=Flex]]Quote[/quote]] =[br]
 [quote=Flex]Quote[/quote][br]
+[blockquote]]Your Text here[[/blockquote] = [blockquote]Your Text here[/blockquote][br]
 [ul]][li]].....[/li]][li]].....[/li]][li]].....[/li]][/ul]] =
 [ul]
 [li]a.....[/li]
@@ -117,9 +118,7 @@ print $hash{stuff}{'1'};[/c][br][br]
 [b]Unicode Support[/b][br]
 [utf://#x3A3]] = [utf://#x3A3][br]
 [utf://#0931]] = [utf://#0931][br]
-&#0931&#59; =  &#0931;[br][br]
-[b]Entity names[/b][br]
-&iquest&#59; = &iquest;[br]
+[utf://iquest]] = [utf://iquest][br]
  [hr]] = [hr]
 [b]Built Tags[/b][br]
 [[google://Google] = [google://Google] Search[br]
@@ -128,10 +127,13 @@ print $hash{stuff}{'1'};[/c][br][br]
 [[wq://Wikiquote:About] or [wikiquote://Wikiquote:About] Wikiquote[br]
 [[ws://Wikisource:About_Wikisource] or [wikisource://Wikisource:About_Wikisource] Wikisource[br]
 [[cpan://Cpan] = [cpan://Cpan] Cpan Module Search[br]
-[[time] = [time][br]
+[[time] = [time]
 HTML
 
-$message = $aubbc->do_all_ubbc($message);
+# replace the list with any error that may happen
+$message = $aubbc->aubbc_error()
+ ? $aubbc->aubbc_error()
+ : $aubbc->do_all_ubbc($message);
 
 print "Content-type: text/html\n\n";
 print <<HTML;
@@ -243,10 +245,8 @@ sub other_sites {
   if $tag_name eq 'google';
 
 # localtime()
- if ($tag_name eq 'time') {
-  my $time = scalar(localtime);
-  $text_from_AUBBC = "<b>[$time]</b>";
- }
+ $text_from_AUBBC = '<b>['.scalar(localtime).']</b>'
+  if $tag_name eq 'time';
  
  return $text_from_AUBBC;
 }

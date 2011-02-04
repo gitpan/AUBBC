@@ -55,19 +55,24 @@ print $hash{stuff}{'1'};[/c][br][br]
 [quote]]Quote[/quote]] = [quote]Quote[/quote][br]
 [quote=Flex]]Quote[/quote]] = [quote=Flex]Quote[/quote][br]
 [color=Red]]Color[/color]] = [color=Red]Color[/color][br]
-[b]Unicode Support[/b][br]
-[utf://#x3A3]] = [utf://#x3A3][br]
-[utf://#0931]] = [utf://#0931][br]
-&#0931&#59; =  &#0931;[br][br]
-[b]Entity names[/b][br]
-&iquest&#59; = &iquest;[br]
- [hr]
+[blockquote]]Your Text here[[/blockquote] = [blockquote]Your Text here[/blockquote]
+[[hr] = [hr]
 [list]
 [*=1]stuff
 [*]stuff2
 [*]stuff3
 [/list]
 
+[ol]
+[li=1].....[/li]
+[li].....[/li]
+[li].....[/li]
+[/ol]
+
+[b]Unicode Support[/b][br]
+[utf://#x3A3]] = [utf://#x3A3][br]
+[utf://#0931]] = [utf://#0931][br]
+[utf://iquest]] = [utf://iquest][br]
 EOM
 
 
