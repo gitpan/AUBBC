@@ -1,5 +1,5 @@
 
-=head1 Name
+=head1 NAME
 
 AUBBC
 
@@ -12,11 +12,11 @@ AUBBC
 
   print $aubbc->do_all_ubbc($message);
 
-=head1 Description
+=head1 ABSTRACT
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
-=head1 Abstract
+=head1 DESCRIPTION
 
 The advantage of using this BBcode is to have the piece of mind of using a secure program,
 to restrict the usage of HTML/XHTML elements and to make formatting of posts easy to people that have no HTML/XHTML skill.
@@ -145,11 +145,11 @@ and if #none is used the other bypass tags will not be removed.
 
 Bypass Tag list:
 
-  #none
-  #noaubbc
-  #nobuild
-  #noutf
-  #nosmileys
+        #none
+        #noaubbc
+        #nobuild
+        #noutf
+        #nosmileys
 
 =head2 for_links
 
@@ -164,10 +164,11 @@ Bypass Tag list:
 Enable or Disable AUBBC Tag Escape Default 1 is Enabled, 0 is Disable.
 
 Escaping a Tag:
-  [b]Stuff[/b] # Normal Tag Bold
-  [b]]Stuff[/b]] # Escaped Tag Bold
-  [[b]Stuff[[/b] # Escaped Tag Bold
-  [[b]]Stuff[[/b]] # Escaped Tag Bold
+
+        [b]Stuff[/b] # Normal Tag Bold
+        [b]]Stuff[/b]] # Escaped Tag Bold
+        [[b]Stuff[[/b] # Escaped Tag Bold
+        [[b]]Stuff[[/b]] # Escaped Tag Bold
 
  Small Bug if Enabled:
 
@@ -599,6 +600,10 @@ Please report anything you think is a bug to bug-AUBBC [at] rt.cpan.org or shaka
 
 =head1 History
 
+v4.04 - 02/05/2011
+
+Fixed - Bug with quote tag, needed to convert all its tags.
+
 v4.03 - 02/03/2011
 
 Addition - New Object method aubbc_error . Developers can now controle if or when
@@ -837,7 +842,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.03 - 02/03/2011 By: N.K.A.
+AUBBC.pm, v4.04 - 02/05/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 

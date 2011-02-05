@@ -10,7 +10,11 @@
  shakaflex [at] gmail.com
  http://search.cpan.org/~sflex/
 
-=head1 Disclaimer
+=head1 ABSTRACT
+
+Advanced Universal Bulletin Board Code a Perl BBcode API
+
+=head1 DESCRIPTION
 
 This is a none working file(syntax checks ok)! It discribes one way to use this module
 in projects like forums, blogs, wiki's, bulletin boards or other development.

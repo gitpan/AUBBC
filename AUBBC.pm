@@ -2,7 +2,7 @@ package AUBBC;
 use strict;
 use warnings;
 
-our $VERSION     = '4.03';
+our $VERSION     = '4.04';
 our $BAD_MESSAGE = 'Error';
 our $DEBUG_AUBBC = 0;
 our $MEMOIZE     = 1;
@@ -185,9 +185,11 @@ sub do_ubbc {
 
  $msg =~ s/\[color=([\w#]+)\](?s)(.+?)\[\/color\]/<span style="color:$1;">$2<\/span>/g;
 
- $msg =~ s/\[quote=([\w\s]+)\](?s)(.+?)\[\/quote\]/<div$AUBBC{quote_class}><small><strong>$1:<\/strong><\/small><br$AUBBC{html_type}>
+ 1 while $msg =~
+  s/\[quote=([\w\s]+)\](?s)(.+?)\[\/quote\]/<div$AUBBC{quote_class}><small><strong>$1:<\/strong><\/small><br$AUBBC{html_type}>
 $2<\/div>$AUBBC{quote_extra}/g;
- $msg =~ s/\[quote\](?s)(.+?)\[\/quote\]/<div$AUBBC{quote_class}>$1<\/div>$AUBBC{quote_extra}/g;
+ 1 while $msg =~
+  s/\[quote\](?s)(.+?)\[\/quote\]/<div$AUBBC{quote_class}>$1<\/div>$AUBBC{quote_extra}/g;
 
  $msg =~ s/\[(left|right|center)\](?s)(.+?)\[\/\1\]/<div style=\"text-align: $1;\">$2<\/div>/g;
  $msg =~ s/\[li=(\d+)\](?s)(.+?)\[\/li\]/<li value="$1">$2<\/li>/g;
@@ -516,7 +518,7 @@ __END__
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.03 2/03/2011 By: N.K.A.
+AUBBC.pm, v4.04 2/05/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
@@ -529,5 +531,39 @@ http://code.google.com/p/aubbc/
 Note: This code has a lot of settings and works good
 with most default settings see the POD and example files
 in the archive for usage.
+
+=head1 NAME
+
+AUBBC
+
+=head1 SYNOPSIS
+
+  use AUBBC;
+  my $aubbc = AUBBC->new();
+
+  my $message = 'Lets [b]Bold in HTML[/b]';
+
+  print $aubbc->do_all_ubbc($message);
+
+=head1 ABSTRACT
+
+Advanced Universal Bulletin Board Code a Perl BBcode API
+
+=head1 DESCRIPTION
+
+The advantage of using this BBcode is to have the piece of mind of using a secure program,
+to restrict the usage of HTML/XHTML elements and to make formatting of posts easy to people that have no HTML/XHTML skill.
+Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
+
+The [c] or code tags can highlight Perl code, highlighting the Perl code with CSS in HTML/XHTML,
+and in the examples folder the tag_list.cgi file has a CSS code you could work from and now a setting to change to a costume highlighter function.
+This module addresses many security issues the BBcode tags may have mainly cross site script also known as XSS.
+Each message is escaped before it gets returned if script_escape is Enabled and checked for many types of security problems before that tag converts to HTML/XHTML.
+The script_escape setting and method also converts the &#39; sign so the text can be stored in a SQL back-end.
+Most of the free web portals use the &#124; sign as the delimiter for the flat file database, the script_escape setting and method also converts that sign so the structure of the database is retained.
+
+Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
+
+If there isn't a popular tag available this module provides a method to "Build your own tags" custom tags can help link to parts of the current web page, other web pages and add other HTML elements.
 
 =cut
