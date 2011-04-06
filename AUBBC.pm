@@ -2,14 +2,14 @@ package AUBBC;
 use strict;
 use warnings;
 
-our $VERSION     = '4.04';
-our $BAD_MESSAGE = 'Error';
+our $VERSION     = '4.05';
+our $BAD_MESSAGE = 'Unathorized';
 our $DEBUG_AUBBC = 0;
 our $MEMOIZE     = 1;
 my $msg          = '';
 my $aubbc_error  = '';
 my $long_regex   = '[\w\.\/\-\~\@\:\;\=]+(?:\?[\w\~\.\;\:\,\$\-\+\!\*\?\/\=\&\@\#\%]+?)?';
-my @do_f         = (1,1,1,1,1,0,0,0,time.$$.'000','');
+my @do_f         = (1,1,1,1,1,0,0,0,time.$$.'000','',1);
 my @key64        = ('A'..'Z','a'..'z',0..9,'+','/');
 my %SMILEYS      = ();
 my %Build_AUBBC  = ();
@@ -52,6 +52,55 @@ my %AUBBC        = (
     highlight_class8    => '',
     highlight_class9    => '',
     );
+my @security_levels = ('Guest', 'User', 'Moderator','Administrator');
+my ($user_level, $high_level, $user_key) = ('Guest', 3, 0);
+my %Tag_SecLVL = (
+    code                => { level => 0, text => $BAD_MESSAGE, },
+    image               => { level => 0, text => $BAD_MESSAGE, },
+    link                => { level => 0, text => $BAD_MESSAGE, },
+    );
+
+sub security_levels {
+ my ($self,@s_levels) = @_;
+ $do_f[10] = 0;
+ @s_levels
+  ? @security_levels = @s_levels
+  : return @security_levels;
+}
+
+sub user_level {
+ my ($self,$u_level) = @_;
+ $do_f[10] = 0;
+ defined $u_level
+  ? $user_level = $u_level
+  : return $user_level;
+}
+
+sub tag_security {
+ my ($self,%s_tags) = @_;
+ %s_tags
+  ? %Tag_SecLVL = %s_tags
+  : return %Tag_SecLVL;
+}
+
+sub check_access {
+ my $tag = shift;
+ unless (defined $tag && $do_f[10]) {
+  $do_f[10] = 1;
+  ($high_level, $user_key) = (scalar(@security_levels), 0);
+
+  for(my $i = 0; $i < $high_level;) {
+   $user_key = $i if $security_levels[$i] eq $user_level;
+   $i++;
+  }
+ }
+ 
+ if (defined $tag && $do_f[10]) {
+  $user_key >= $Tag_SecLVL{$tag}{level}
+   ? return 1
+   : return '';
+ }
+}
 
 sub new {
 warn 'CREATING AUBBC '.$VERSION if $DEBUG_AUBBC;
@@ -66,6 +115,7 @@ warn 'CREATING AUBBC '.$VERSION if $DEBUG_AUBBC;
    Memoize::memoize('AUBBC::script_escape');
    Memoize::memoize('AUBBC::html_to_text');
   }
+   $aubbc_error .= $@."\n" if $@;
  }
 return bless {};
 }
@@ -146,10 +196,15 @@ sub code_download {
 
 sub code_tag {
  my ($code,$name) = @_;
+ if (check_access('code')) {
  $name = "# $name:<br$AUBBC{html_type}>\n" if $name;
  return "$name<div$AUBBC{code_class}".&code_download."><code>\n".
 $AUBBC{highlight_function}->($code).
 "\n</code></div>".$AUBBC{code_extra}.$do_f[9];
+ }
+  else {
+   return $Tag_SecLVL{code}{text};
+   }
 }
 
 sub make_image {
@@ -162,12 +217,17 @@ my ($align,$src,$width,$height,$alt) = @_;
 
 sub make_link {
  my ($link,$name,$javas,$targ) = @_;
+ if (check_access('link')) {
  my $linkd = "<a href=\"$link\"";
  $linkd .= " onclick=\"$javas\"" if $javas;
  $linkd .= $AUBBC{href_target} if $targ;
  $linkd .= $AUBBC{href_class}.'>';
  $linkd .= $name ? $name : $link;
  return $linkd.'</a>';
+ }
+  else {
+   return $Tag_SecLVL{link}{text};
+   }
 }
 
 sub do_ubbc {
@@ -229,6 +289,7 @@ my $list = shift;
 
 sub fix_image {
  my ($tmp2, $tmp) = @_;
+ if (check_access('image')) {
  if ($tmp !~ m/\A\w+:\/\/|\// || $tmp =~ m/\?|\#|\.\bjs\b\z/i) {
   $tmp = "[<font color=red>$BAD_MESSAGE</font>]$tmp2";
  }
@@ -242,10 +303,15 @@ sub fix_image {
    : make_image($tmp2,$tmp,'','','').$AUBBC{image_wrap};
  }
  return $tmp;
+ }
+  else {
+   return $Tag_SecLVL{image}{text};
+   }
 }
 
 sub protect_email {
  my $em = shift;
+ if (check_access('link')) {
  my ($email1, $email2, $ran_num, $protect_email, @letters) =
   ('', '', '', '', split (//, $em));
  $protect_email = '[' if $AUBBC{protect_email} eq 3 || $AUBBC{protect_email} eq 4;
@@ -267,6 +333,10 @@ sub protect_email {
 
  return make_link('javascript:void(0)',$AUBBC{email_message},"javascript:MyEmCode('$AUBBC{protect_email}',$protect_email);",'')
   if $AUBBC{protect_email} eq '2' || $AUBBC{protect_email} eq '3' || $AUBBC{protect_email} eq '4';
+ }
+  else {
+   return $Tag_SecLVL{link}{text};
+   }
 }
 
 sub js_print {
@@ -325,14 +395,19 @@ sub do_build_tag {
    do_sub( $_, '' , $Build_AUBBC{$_}[2] ) || $1;
   /eg if $Build_AUBBC{$_}[1] eq '3';
 
-  $msg =~ s/\[$_\]/$Build_AUBBC{$_}[2]/g if $Build_AUBBC{$_}[1] eq '4';
+  $msg =~ s/\[$_\]/
+   check_access($_) ? $Build_AUBBC{$_}[2] : $Tag_SecLVL{$_}{text};
+  /eg if $Build_AUBBC{$_}[1] eq '4';
  }
 }
 
 sub do_sub {
  my ($key, $term, $fun) = @_;
  warn 'ENTER do_sub' if $DEBUG_AUBBC;
- return $fun->($key, $term) || '';
+ check_access($key)
+  ? return $fun->($key, $term) || ''
+  : return $Tag_SecLVL{$key}{text};
+ #return $fun->($key, $term) || '';
 }
 
 sub check_subroutine {
@@ -350,7 +425,7 @@ sub add_build_tag {
  $NewTag{function} = check_subroutine($NewTag{function},'')
   if $NewTag{type} ne '4';
  
- $self->aubbc_error("Usage: add_build_tag - function 'Undefined subroutine' => $NewTag{function2}\n")
+ $self->aubbc_error("Usage: add_build_tag - function 'Undefined subroutine' => $NewTag{function2}")
   if ! $NewTag{function};
  
  if ($NewTag{function}) {
@@ -369,11 +444,14 @@ sub add_build_tag {
     }
    
    $Build_AUBBC{$NewTag{name}} = [$NewTag{pattern}, $NewTag{type}, $NewTag{function}];
+   $NewTag{level}  ||= 0;
+   $NewTag{error}  ||= $BAD_MESSAGE;
+   $Tag_SecLVL{$NewTag{name}}  = {level => $NewTag{level}, text => $NewTag{error},};
    $do_f[5] = 1 if !$do_f[5];
    warn 'Added Build_AUBBC Tag '.$Build_AUBBC{$NewTag{name}} if $DEBUG_AUBBC && $Build_AUBBC{$NewTag{name}};
   }
    else {
-   $self->aubbc_error('Usage: add_build_tag - Bad name or pattern format'."\n");
+   $self->aubbc_error('Usage: add_build_tag - Bad name or pattern format');
   }
  }
 }
@@ -411,6 +489,7 @@ sub do_all_ubbc {
  warn 'ENTER do_all_ubbc' if $DEBUG_AUBBC;
  $msg = defined $message ? $message : '';
  if ($msg) {
+  check_access();
   $msg = $self->script_escape($msg,'') if $AUBBC{script_escape};
   $msg =~ s/&(?!\#?\w+;)/&amp;/g if $AUBBC{fix_amp};
   if (!$AUBBC{no_bypass} && $msg =~ m/\A\#no/) {
@@ -506,7 +585,7 @@ sub version {
 sub aubbc_error {
  my ($self, $error) = @_;
  defined $error && $error
-  ? $aubbc_error .= $error
+  ? $aubbc_error .= $error . "\n"
   : return $aubbc_error;
 }
 
@@ -518,7 +597,7 @@ __END__
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.04 2/05/2011 By: N.K.A.
+AUBBC.pm, v4.05 4/05/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
@@ -526,9 +605,15 @@ shakaflex [at] gmail.com
 
 http://search.cpan.org/~sflex/
 
-http://code.google.com/p/aubbc/
+http://aubbc.google.com/
 
-Note: This code has a lot of settings and works good
+Development Notes: Highlighting functions list and tags/commands for more
+language highlighters. Ideas make some new tags like [perl] or have a command in the code
+tag like [code]perl:print 'perl';[/code] with a default highlighting method if
+a command was not used. Then highlighting of many types of code could be allowed
+even markup like HTML.
+
+Notes: This code has a lot of settings and works good
 with most default settings see the POD and example files
 in the archive for usage.
 
@@ -551,6 +636,28 @@ Advanced Universal Bulletin Board Code a Perl BBcode API
 
 =head1 DESCRIPTION
 
+AUBBC is a object oriented BBcode API designed as a developers tool for themes, wiki's, forums and other BBcode to HTML Parser needs.
+
+Features:
+
+1) Massive amount of supported tags.
+
+2) Build your own tags to add custom made tags.
+
+3) Full XSS Security for supported tags.
+
+4) High Speed Parser
+
+5) Assign security levels for links, images, build and code tags.
+
+6) Protection for emails to hide them from harvesters.
+
+7) Code download for code tags
+
+8) Perl code highlighter in the code tags
+
+9) Fully customizable settings.
+
 The advantage of using this BBcode is to have the piece of mind of using a secure program,
 to restrict the usage of HTML/XHTML elements and to make formatting of posts easy to people that have no HTML/XHTML skill.
 Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
@@ -565,5 +672,6 @@ Most of the free web portals use the &#124; sign as the delimiter for the flat f
 Allows easy conversion to HTML and XHTML, existing tags will convert to the HTML type set.
 
 If there isn't a popular tag available this module provides a method to "Build your own tags" custom tags can help link to parts of the current web page, other web pages and add other HTML elements.
+
 
 =cut

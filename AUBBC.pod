@@ -18,6 +18,28 @@ Advanced Universal Bulletin Board Code a Perl BBcode API
 
 =head1 DESCRIPTION
 
+AUBBC is a object oriented BBcode API designed as a developers tool for themes, wiki's, forums and other BBcode to HTML Parser needs.
+
+Features:
+
+1) Massive amount of supported tags.
+
+2) Build your own tags to add custom made tags.
+
+3) Full XSS Security for supported tags.
+
+4) High Speed Parser
+
+5) Assign security levels for links, images, build and code tags.
+
+6) Protection for emails to hide them from harvesters.
+
+7) Code download for code tags
+
+8) Perl code highlighter in the code tags
+
+9) Fully customizable settings.
+
 The advantage of using this BBcode is to have the piece of mind of using a secure program,
 to restrict the usage of HTML/XHTML elements and to make formatting of posts easy to people that have no HTML/XHTML skill.
 Most sites that use these tags show a list of them and/or easy way to insert the tags to the form field by the user.
@@ -95,6 +117,71 @@ XHTML has better JavaScript security standards then HTML.
 Developers can also use cookies with "httponly" flags to disable JavaScript from
 reading that cookie, but the browsers must support it.
 XSS, browser hijacking and other security risks can change by settings, browser vendors and program versions.
+
+=head1 Tag Security Access
+
+New to v4.05. Assign security levels for links, images, build and code tags.
+Default settings allows all tags to be seen so there would be no changes needed
+if you just wanted the latest version and not use this method yet.
+
+This method works with your current authentication and will be explained more later.
+
+=head2 User Security Levels
+
+Default security levels are from low to high!!!
+
+        # The array numbers >>:    0        1         2             3
+        $aubbc->security_levels('Guest', 'User', 'Moderator','Administrator')
+
+1) The security levels array needs to have the security levels from low to high in it!!
+
+2) The names must be spelled the same as the name passed to method user_level();
+
+3) Security access is determined by low to high numbers and with the default Guest
+will be number/level 0 in the array. if the links was set for User
+the links level will have to be 1 = User making any lower level unable to
+see any bbcode links but, the Administrator would still see all.
+
+=head2 Tag Security Levels
+
+To change the security level of links, images and code use this method this way:
+
+        $aubbc->tag_security(
+                code         => { level => 0, text => 'register to see this', },
+                image        => { level => 0, text => 'register to see this', },
+                link         => { level => 0, text => 'register to see this', },
+        );
+
+level - the array number of the security level
+
+text  - the text or HTML to show if user has no access
+
+Build your own tags has 2 new variables now:
+
+  $aubbc->add_build_tag(
+        name     => 'ok',
+        pattern  => 'l,s',
+        type     => 1,
+        function => 'My_Message::check_ok_tag',
+        level    => 3,
+        error    => 'register to see this',
+        );
+        
+level - the array number of the security level
+
+error - the text or HTML to show if user has no access
+
+For the build tags leaving the variables blank will default level to 0 and
+error to the $AUBBC::BAD_MESSAGE string.
+
+=head2 User Access
+
+This method receives the current users security level name from the web application.
+
+        $aubbc->user_level('Administrator');
+
+If you are using the tag security you will want to set the user_level after the user
+was authenticated by the web application and before do_all_ubbc is used.
 
 =head1 Settings
 
@@ -419,7 +506,7 @@ images_url/smilies/lol.gif
 
 These are the settings and methods for using custom tags.
 
-=head2 $aubbc->add_build_tag(name=>'stuff', pattern=>'stuff' , type=>'stuff', function=>'stuff');
+=head2 $aubbc->add_build_tag(name=>'stuff', pattern=>'stuff' , type=>'stuff', function=>'stuff',...);
 
 name - will be the tags name and is limited to a-z 0-9 - _
 
@@ -443,6 +530,13 @@ function - a pre-defined subroutine that receives the matched pattern, tag name 
 unless type is set to 4 then it will replace the tag with what text is in the function.
 
    Note: if the function returns undefined, '' or 0 the tag will not be changed.
+
+level - the array number of the security level
+
+error - the text or HTML to show if user has no access
+
+        Note: For the build tags leaving the variables blank will default level to 0 and
+        error to the $AUBBC::BAD_MESSAGE string.
 
 Usage:
 
@@ -514,7 +608,7 @@ There are two ways to use this.
 
 =head2 $AUBBC::BAD_MESSAGE
 
-Default message is 'Error', this message is used when the code finds bad characters in [email] or [img] tags.
+Default message is 'Unathorized', this message is used when the code finds bad characters in [email] or [img] tags.
 
 Usage of this setting:
 
@@ -599,6 +693,13 @@ Returns the current version of the module.
 Please report anything you think is a bug to bug-AUBBC [at] rt.cpan.org or shakaflex [at] gmail.com
 
 =head1 History
+
+v4.05 - 04/05/2011
+
+Addition - Assign security levels for links, images, built and code tags.
+New subroutine names: security_levels, user_level, tag_security, check_access
+
+Changed - The default value for $AUBBC::BAD_MESSAGE is now 'Unathorized'
 
 v4.04 - 02/05/2011
 
@@ -842,7 +943,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.04 - 02/05/2011 By: N.K.A.
+AUBBC.pm, v4.05 - 04/05/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
@@ -850,10 +951,16 @@ shakaflex [at] gmail.com
 
 http://search.cpan.org/~sflex/
 
-http://code.google.com/p/aubbc/
+http://aubbc.google.com/
 
-Note: This code has a lot of settings and works good
+Development Notes: Highlighting functions list and tags/commands for more
+language highlighters. Ideas make some new tags like [perl] or have a command in the code
+tag like [code]perl:$some ='perl';[/code] with a default highlighting method if
+a command was not used. Then highlighting of many types of code could be allowed
+even markup like HTML.
+
+Notes: This code has a lot of settings and works good
 with most default settings see the POD and example files
-in the archive for usage
+in the archive for usage.
 
 =cut

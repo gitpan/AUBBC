@@ -1,5 +1,12 @@
 Improvement history for AUBBC
 
+v4.05 - 04/05/2011
+
+Addition - Assign security levels for links, images, built and code tags.
+New subroutine names: security_levels, user_level, tag_security, check_access
+
+Changed - The default value for $AUBBC::BAD_MESSAGE is now 'Unathorized'
+
 v4.04 - 02/05/2011
 
 Fixed - Bug with quote tag, needed to convert all its tags.
