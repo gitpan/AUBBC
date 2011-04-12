@@ -126,6 +126,8 @@ if you just wanted the latest version and not use this method yet.
 
 This method works with your current authentication and will be explained more later.
 
+Note: The smilies is not controled by this security.
+
 =head2 User Security Levels
 
 Default security levels are from low to high!!!
@@ -148,8 +150,8 @@ To change the security level of links, images and code use this method this way:
 
         $aubbc->tag_security(
                 code         => { level => 0, text => 'register to see this', },
-                image        => { level => 0, text => 'register to see this', },
-                link         => { level => 0, text => 'register to see this', },
+                img          => { level => 0, text => 'register to see this', },
+                url          => { level => 0, text => 'register to see this', },
         );
 
 level - the array number of the security level
@@ -694,6 +696,21 @@ Please report anything you think is a bug to bug-AUBBC [at] rt.cpan.org or shaka
 
 =head1 History
 
+v4.06 - 04/12/2011
+
+Fixed - The hash for tag_security() needed the images and link renamed to a tag
+name being used. Changed the image name to img and the link to url. Read
+"Tag Security Levels" for more info.
+
+Fixed - security for links was in method make_link and was causing an access issue
+if used outside of the module. Made a new method to check link access now the
+make_link method could be used outside of the module without the security access
+in it, as intended.
+
+Changed - forgot to say in version 4.05 that I changed the aubbc_error so a new line
+will be added after each inserted error.
+
+
 v4.05 - 04/05/2011
 
 Addition - Assign security levels for links, images, built and code tags.
@@ -943,7 +960,7 @@ Released.
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.05 - 04/05/2011 By: N.K.A.
+AUBBC.pm, v4.06 - 04/12/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
@@ -951,7 +968,7 @@ shakaflex [at] gmail.com
 
 http://search.cpan.org/~sflex/
 
-http://aubbc.google.com/
+http://aubbc.googlecode.com/
 
 Development Notes: Highlighting functions list and tags/commands for more
 language highlighters. Ideas make some new tags like [perl] or have a command in the code

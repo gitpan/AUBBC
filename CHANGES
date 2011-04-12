@@ -1,5 +1,19 @@
 Improvement history for AUBBC
 
+v4.06 - 04/12/2011
+
+Fixed - The hash for tag_security() needed the images and link renamed to a tag
+name being used. Changed the image name to img and the link to url. Read
+"Tag Security Levels" for more info.
+
+Fixed - security for links was in method make_link and was causing an access issue
+if used outside of the module. Made a new method to check link access now the
+make_link method could be used outside of the module without the security access
+in it, as intended.
+
+Changed - forgot to say in version 4.05 that I changed the aubbc_error so a new line
+will be added after each inserted error.
+
 v4.05 - 04/05/2011
 
 Addition - Assign security levels for links, images, built and code tags.

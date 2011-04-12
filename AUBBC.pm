@@ -2,7 +2,7 @@ package AUBBC;
 use strict;
 use warnings;
 
-our $VERSION     = '4.05';
+our $VERSION     = '4.06';
 our $BAD_MESSAGE = 'Unathorized';
 our $DEBUG_AUBBC = 0;
 our $MEMOIZE     = 1;
@@ -56,8 +56,8 @@ my @security_levels = ('Guest', 'User', 'Moderator','Administrator');
 my ($user_level, $high_level, $user_key) = ('Guest', 3, 0);
 my %Tag_SecLVL = (
     code                => { level => 0, text => $BAD_MESSAGE, },
-    image               => { level => 0, text => $BAD_MESSAGE, },
-    link                => { level => 0, text => $BAD_MESSAGE, },
+    img                 => { level => 0, text => $BAD_MESSAGE, },
+    url                 => { level => 0, text => $BAD_MESSAGE, },
     );
 
 sub security_levels {
@@ -85,12 +85,15 @@ sub tag_security {
 
 sub check_access {
  my $tag = shift;
- unless (defined $tag && $do_f[10]) {
+ unless ($do_f[10]) {
   $do_f[10] = 1;
   ($high_level, $user_key) = (scalar(@security_levels), 0);
 
   for(my $i = 0; $i < $high_level;) {
-   $user_key = $i if $security_levels[$i] eq $user_level;
+   if ($security_levels[$i] eq $user_level) {
+    $user_key = $i;
+    last;
+    }
    $i++;
   }
  }
@@ -217,17 +220,12 @@ my ($align,$src,$width,$height,$alt) = @_;
 
 sub make_link {
  my ($link,$name,$javas,$targ) = @_;
- if (check_access('link')) {
  my $linkd = "<a href=\"$link\"";
  $linkd .= " onclick=\"$javas\"" if $javas;
  $linkd .= $AUBBC{href_target} if $targ;
  $linkd .= $AUBBC{href_class}.'>';
  $linkd .= $name ? $name : $link;
  return $linkd.'</a>';
- }
-  else {
-   return $Tag_SecLVL{link}{text};
-   }
 }
 
 sub do_ubbc {
@@ -241,7 +239,7 @@ sub do_ubbc {
  $msg =~ s/\[email\](?![\w\.\-\&\+]+\@[\w\.\-]+).+?\[\/email\]/\[<font color=red>$BAD_MESSAGE<\/font>\]email/g;
  $AUBBC{protect_email}
   ? $msg =~ s/\[email\]([\w\.\-\&\+]+\@[\w\.\-]+)\[\/email\]/protect_email($1)/ge
-  : $msg =~ s/\[email\]([\w\.\-\&\+]+\@[\w\.\-]+)\[\/email\]/make_link("mailto:$1",$1,'','')/ge;
+  : $msg =~ s/\[email\]([\w\.\-\&\+]+\@[\w\.\-]+)\[\/email\]/link_check("mailto:$1",$1,'','')/ge;
 
  $msg =~ s/\[color=([\w#]+)\](?s)(.+?)\[\/color\]/<span style="color:$1;">$2<\/span>/g;
 
@@ -263,8 +261,15 @@ $2<\/div>$AUBBC{quote_extra}/g;
  
  $msg =~ s/(<\/?(?:ol|ul|li|hr)\s?\/?>)\r?\n?<br(?:\s?\/)?>/$1/g;
 
- $msg =~ s/\[url=(\w+\:\/\/$long_regex)\](.+?)\[\/url\]/make_link($1,fix_message($2),'',1)/ge;
- $msg =~ s/(?<!["=\.\/\'\[\{\;])((?:\b\w+\b\:\/\/)$long_regex)/make_link($1,$1,'',1)/ge;
+ $msg =~ s/\[url=(\w+\:\/\/$long_regex)\](.+?)\[\/url\]/link_check($1,fix_message($2),'',1)/ge;
+ $msg =~ s/(?<!["=\.\/\'\[\{\;])((?:\b\w+\b\:\/\/)$long_regex)/link_check($1,$1,'',1)/ge;
+}
+
+sub link_check {
+ my ($link,$name,$javas,$targ) = @_;
+ check_access('url')
+  ? make_link($link,$name,$javas,$targ)
+  : return $Tag_SecLVL{url}{text};
 }
 
 sub fix_list {
@@ -289,7 +294,7 @@ my $list = shift;
 
 sub fix_image {
  my ($tmp2, $tmp) = @_;
- if (check_access('image')) {
+ if (check_access('img')) {
  if ($tmp !~ m/\A\w+:\/\/|\// || $tmp =~ m/\?|\#|\.\bjs\b\z/i) {
   $tmp = "[<font color=red>$BAD_MESSAGE</font>]$tmp2";
  }
@@ -305,13 +310,13 @@ sub fix_image {
  return $tmp;
  }
   else {
-   return $Tag_SecLVL{image}{text};
+   return $Tag_SecLVL{img}{text};
    }
 }
 
 sub protect_email {
  my $em = shift;
- if (check_access('link')) {
+ if (check_access('url')) {
  my ($email1, $email2, $ran_num, $protect_email, @letters) =
   ('', '', '', '', split (//, $em));
  $protect_email = '[' if $AUBBC{protect_email} eq 3 || $AUBBC{protect_email} eq 4;
@@ -335,7 +340,7 @@ sub protect_email {
   if $AUBBC{protect_email} eq '2' || $AUBBC{protect_email} eq '3' || $AUBBC{protect_email} eq '4';
  }
   else {
-   return $Tag_SecLVL{link}{text};
+   return $Tag_SecLVL{url}{text};
    }
 }
 
@@ -407,7 +412,6 @@ sub do_sub {
  check_access($key)
   ? return $fun->($key, $term) || ''
   : return $Tag_SecLVL{$key}{text};
- #return $fun->($key, $term) || '';
 }
 
 sub check_subroutine {
@@ -597,7 +601,7 @@ __END__
 
 =head1 COPYLEFT
 
-AUBBC.pm, v4.05 4/05/2011 By: N.K.A.
+AUBBC.pm, v4.06 4/12/2011 By: N.K.A.
 
 Advanced Universal Bulletin Board Code a Perl BBcode API
 
@@ -605,7 +609,7 @@ shakaflex [at] gmail.com
 
 http://search.cpan.org/~sflex/
 
-http://aubbc.google.com/
+http://aubbc.googlecode.com/
 
 Development Notes: Highlighting functions list and tags/commands for more
 language highlighters. Ideas make some new tags like [perl] or have a command in the code
